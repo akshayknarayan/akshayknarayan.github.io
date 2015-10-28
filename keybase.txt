@@ -1,0 +1,78 @@
+==================================================================
+https://keybase.io/akshayn
+--------------------------------------------------------------------
+
+I hereby claim:
+
+* I am an admin of https://akshayknarayan.github.io
+* I am akshayn (https://keybase.io/akshayn) on keybase.
+* I have a public key with fingerprint D9A3 C975 50ED 9292 A912  B775 03DC 2CDD C8EE 327D
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "client": {
+            "name": "keybase.io node.js client",
+            "version": "0.8.22"
+        },
+        "key": {
+            "eldest_kid": "01018093e4e00f61fe9bbe4c80c53b22a5b6ea6bd66ae421052c917508a72639f0dd0a",
+            "fingerprint": "d9a3c97550ed9292a912b77503dc2cddc8ee327d",
+            "host": "keybase.io",
+            "key_id": "03dc2cddc8ee327d",
+            "kid": "01018093e4e00f61fe9bbe4c80c53b22a5b6ea6bd66ae421052c917508a72639f0dd0a",
+            "uid": "002978064840fcf9ef6cd7ad8d43c319",
+            "username": "akshayn"
+        },
+        "service": {
+            "hostname": "akshayknarayan.github.io",
+            "protocol": "https:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1446005931,
+    "expire_in": 157680000,
+    "prev": "e7eeee2c81e600acc1516d6fec51295694b3cb0138504c4ece01edbd2a251700",
+    "seqno": 5,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v2
+
+owGtkn9QFGUYx+/wFyHgYdEo4Eir0ziAzLt7u3u7UKkwKQoJlpUO6s3uvu/d7YF7
+x90CHhwaKKBSSFOUCU4lWIpixdBgCQXiD0xOaqQbUkkukuQcDEwmw7J2g2Zy+rf3
+r3fe9/P9Pt/ned+qkGmaQO20a3H9XbeJIu3FYV7zEkj7uBDjbdCFJRRiQraIJFnd
+SdxWhCVgWcjFc04UL9qiJRtE8VZn9BQTh+Uhh1O0SQoF4pl4gsCK4lReVaNsiJyy
+MUuE6i0OcAawekQiAEw0bkIszyNSYIBA6XmC4CieRhzNQ5rmEEnggCIEFjdQgOEM
+BK1nTQBCwCkFTaJkRg67Q1QjYpDl9AJroCiAIEuwBMfiBG9QZHooEAKEAoOQnjBA
+RWixOeWHmsH+TmqcjPdf/n/OnTtpBwjWwACaZEhgEkwsMtECNHCQgaRe0OOsCjqR
+Y2rwXJbTwrkkdabKYZ4oIHWuaiMPAVkS5+BcnBRvFmVLLj/Zmt1hk22CLVuhLLJs
+dyaoLrLLrsryEW+cMjTyYp0ElZn++y1xBRVkUS2BkyQNAMXq8TgMbbOLDmQUVYIy
+0AxQlloI5SmeyICURQgMjhQBJwg4hdOQNiGBwgmWolmS1ws8wPUMBUiBRAICOII8
+JDiCwg0AYGqPOZINS6CUnJxZsXSKZomTcx0IK9oTEDVdow3UzJwRoH5WTdAjun9+
+8GtP6zQ7G5htm3KMq2bHDjSGWcArdu33t4zhnX7dUNXF8BPe4+eqj5Scfm7D0pOH
+j6RvGXn1I1tresDc2fsLl4iHlqxcPZy29MO7g9WpmT7zjZhvres6kivzbxR7Zx0L
+ddfWf/DDymND2O8ZyWLoCz2D7gj7aIp8oSRwwVV6/prn2XTNvjUdnl77d9dO5sLx
+sV7UNHEvabDqi3fa33wmd+DJORWhqbX+Zx9z3He2RXT+IXZ1+v2RwZV1G8d6IlMq
+ym9OD/KcvzovZ3v06ezkJN67rzrgy1/7tu5e3vBbd9HMzI1urXyODO5K+2mi5ZfC
+HXPs84orNlyPCBvrTuw06wq6F4UvOvXJgWGPNBT25+eX3X7blVZH71ntQLq59dPE
+5pSa5h/vf7WsLbltU4YHX3i8c1lNSf+Z8dcLfB0xvTPWZ+qC5Kies0ddTy3Wekav
+jz+6/Xbdg4mKl9+ywJujB98u3BUSJYT69l6+1dzUWDKicdt95S8G7Uqyh0gZ3+Sd
+GF9Vm9h0sCBo85X5vRciW13lP7/vXmu05nvdl+7FWuFns5aXthP1wd4C7+7S9emN
+58NNWVXku1GPn/EtAP6mSpd3xV58mGksbkiqyxtZ0VdWkH907gN8bZm0esRTc+lw
+Q9yd4OGdqQtbqC13a8p2pJ7aHEv6rG8c+Ho0hi61Jt2pX+xueS9s/6H+vj1PDLXH
+rPsL
+=wabz
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/akshayn
+
+==================================================================
