@@ -1,0 +1,54 @@
+==================================================================
+https://keybase.io/akshayn
+--------------------------------------------------------------------
+
+I hereby claim:
+
+* I am an admin of http://akshayn.xyz
+* I am akshayn (https://keybase.io/akshayn) on keybase.
+* I have a public key ASBAMsFtpvkFN5lGK42JYW2Ur4pxwnNMWlRjMzj0y4VPbQo
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "eldest_kid": "01018093e4e00f61fe9bbe4c80c53b22a5b6ea6bd66ae421052c917508a72639f0dd0a",
+            "host": "keybase.io",
+            "kid": "01204032c16da6f9053799462b8d89616d94af8a71c2734c5a54633338f4cb854f6d0a",
+            "uid": "002978064840fcf9ef6cd7ad8d43c319",
+            "username": "akshayn"
+        },
+        "service": {
+            "hostname": "akshayn.xyz",
+            "protocol": "http:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "client": {
+        "name": "keybase.io go client",
+        "version": "1.0.17"
+    },
+    "ctime": 1475086518,
+    "expire_in": 504576000,
+    "merkle_root": {
+        "ctime": 1475086484,
+        "hash": "bcbcea46452c56a94d771df5e9470e1df07547a5bef897d69c04dd2eb1c655654f8308a1116392e95e74c74602d2bf748d4e49fe9c5a88561db5a1c1b21f1451",
+        "seqno": 656681
+    },
+    "prev": "8b634000f21f11b9f9987d8b9d9cd3fa8bea8c4ecc28eb489cca6502534ebc72",
+    "seqno": 18,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgQDLBbab5BTeZRiuNiWFtlK+KccJzTFpUYzM49MuFT20Kp3BheWxvYWTFAvJ7ImJvZHkiOnsia2V5Ijp7ImVsZGVzdF9raWQiOiIwMTAxODA5M2U0ZTAwZjYxZmU5YmJlNGM4MGM1M2IyMmE1YjZlYTZiZDY2YWU0MjEwNTJjOTE3NTA4YTcyNjM5ZjBkZDBhIiwiaG9zdCI6ImtleWJhc2UuaW8iLCJraWQiOiIwMTIwNDAzMmMxNmRhNmY5MDUzNzk5NDYyYjhkODk2MTZkOTRhZjhhNzFjMjczNGM1YTU0NjMzMzM4ZjRjYjg1NGY2ZDBhIiwidWlkIjoiMDAyOTc4MDY0ODQwZmNmOWVmNmNkN2FkOGQ0M2MzMTkiLCJ1c2VybmFtZSI6ImFrc2hheW4ifSwic2VydmljZSI6eyJob3N0bmFtZSI6ImFrc2hheW4ueHl6IiwicHJvdG9jb2wiOiJodHRwOiJ9LCJ0eXBlIjoid2ViX3NlcnZpY2VfYmluZGluZyIsInZlcnNpb24iOjF9LCJjbGllbnQiOnsibmFtZSI6ImtleWJhc2UuaW8gZ28gY2xpZW50IiwidmVyc2lvbiI6IjEuMC4xNyJ9LCJjdGltZSI6MTQ3NTA4NjUxOCwiZXhwaXJlX2luIjo1MDQ1NzYwMDAsIm1lcmtsZV9yb290Ijp7ImN0aW1lIjoxNDc1MDg2NDg0LCJoYXNoIjoiYmNiY2VhNDY0NTJjNTZhOTRkNzcxZGY1ZTk0NzBlMWRmMDc1NDdhNWJlZjg5N2Q2OWMwNGRkMmViMWM2NTU2NTRmODMwOGExMTE2MzkyZTk1ZTc0Yzc0NjAyZDJiZjc0OGQ0ZTQ5ZmU5YzVhODg1NjFkYjVhMWMxYjIxZjE0NTEiLCJzZXFubyI6NjU2NjgxfSwicHJldiI6IjhiNjM0MDAwZjIxZjExYjlmOTk4N2Q4YjlkOWNkM2ZhOGJlYThjNGVjYzI4ZWI0ODljY2E2NTAyNTM0ZWJjNzIiLCJzZXFubyI6MTgsInRhZyI6InNpZ25hdHVyZSJ9o3NpZ8RA0tSwZo/+Ia6fyjt3PWCSbC4BkgJnT9tNjG1MCu3mj9csoVr2mLgNtL0+pf6AaTN1jqDLUbqdm2kgguTXP9dYAKhzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIGGj5bB+wp1uIoJBMhzr36cOsyPlWXdkaO5mGiEdV6BXo3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/akshayn
+
+==================================================================
