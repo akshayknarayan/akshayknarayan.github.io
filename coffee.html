@@ -27,6 +27,54 @@ a:visited {
   }
 }
 </style>
+<style>
+  .map-container {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border: 0px;
+    padding: 0px;
+    font-size: 0;
+    border: 1px solid #ccc;
+    width: 512px;
+    height: 256px;
+  }
+
+  .map {
+    position: absolute;
+  }
+
+  .tile {
+    border: 0px;
+    padding: 0px;
+    font-size: 0;
+    width: 256px;
+    height: 256px;
+  }
+
+  .annotation {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .annotation:hover::after {
+    content: attr(data-label);
+    position: absolute;
+    left: 12px;
+    top: -5px;
+    background: white;
+    color: black;
+    padding: 2px 6px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+</style>
     </head>
     <body>
         <h3>Coffee Recommendations</h3>
@@ -45,6 +93,20 @@ a:visited {
         
         <h4 id="pvd">Providence <a href="#pvd">☕︎</a></h4>
         <div style="text-align:left; display:inline-block">
+            <div class="map-container">
+                <div class="map">
+                <img class="tile" src="https://a.basemaps.cartocdn.com/light_all/13/2470/3046.png" style="left: 0px; top: 0px;">
+                <img class="tile" src="https://a.basemaps.cartocdn.com/light_all/13/2471/3046.png" style="left: 256px; top: 0px;">
+
+                <!-- Coordinates must be manually calculated relative to the tile -->
+                <div class="annotation" style="left: 277px; top: 77px;" data-label="Bolt Coffee"></div>
+                <div class="annotation" style="left: 323px; top: 63px;" data-label="Ceremony"></div>
+                <div class="annotation" style="left: 326px; top: 136px;" data-label="Coffee Exchange"></div>
+                <div class="annotation" style="left: 310px; top: 129px;" data-label="Brown Bee Coffee"></div>
+                <div class="annotation" style="left: 248px; top: 108px;" data-label="Small Point Cafe"></div>
+                <div class="annotation" style="left: 276px; top: 158px;" data-label="Seven Stars Bakery"></div>
+                </div>
+            </div>
             <ul>
                 <li>
                     Near Brown University, <a href="https://www.boltcoffeeco.com/">Bolt Coffee</a> inside the RISD Museum is nice. <a href="http://www.ceremonypvd.com/onlineorder">Ceremony</a> is also good, though it is primarily tea-focused. 
