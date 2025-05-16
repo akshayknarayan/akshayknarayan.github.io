@@ -27,7 +27,7 @@ def get_bounding_tiles(coords, zoom):
     return (minx, maxx, miny, maxy)
 
 def maptile_url(zoom, x, y):
-    return f"https://a.basemaps.cartocdn.com/dark_all/{zoom}/{x}/{y}.png"
+    return f"https://a.basemaps.cartocdn.com/rastertiles/voyager/{zoom}/{x}/{y}.png"
 
 def print_map_html(minx, maxx, miny, maxy, annotations):
     def map_tile_img(x, y, left, top):
@@ -39,17 +39,17 @@ def print_map_html(minx, maxx, miny, maxy, annotations):
             imgs.append(map_tile_img(x_tile, y_tile, x_idx * 256, y_idx * 256))
     imgs = '\n'.join(imgs)
 
-    def annotation_div(left, top, label):
-        return f'<div class="annotation" style="left: {left}px; top: {top}px;" data-label="{label}"></div>'
+    def annotation_div(left, top, label, url):
+        return f'<a class="annotation" style="left: {left}px; top: {top}px;" data-label="{label}" href="{url}"></a>'
 
     annotation_divs = []
-    for _, name, px in annotations[["Name", "px"]].to_records():
+    for _, name, px, url in annotations[["Name", "px", "Website"]].to_records():
         left, top = px
-        annotation_divs.append(annotation_div(left, top, name))
+        annotation_divs.append(annotation_div(left, top, name, url))
     annotation_divs = '\n'.join(annotation_divs)
 
     return f'''
-        <div class="map-container" style="width={(maxx-minx+1)*256}px; height={(maxy-miny+1)*256}px">
+        <div class="map-container" style="width:{(maxx-minx+1)*256}px; height:{(maxy-miny+1)*256}px;">
             <div class="map">
             {imgs}
             {annotation_divs}
