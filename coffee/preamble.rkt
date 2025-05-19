@@ -18,7 +18,6 @@ There are many medium-to-large-ish chains, with varying levels of consistency an
 @p{
 Also, thanks to the various members of my coffee committee (in alphabetical order), Albert, Deepti, Gavin, Panda, Paroma, Pratiksha, Rachee, Sagar, Shoumik, Shriram, Suresh, and Vipul sending in their suggestions! Please get in touch if you have a
 @scouting-report{scouting report}
-@;elem[#:style (style #f (list (color-property "#ff6347")))]{scouting report}
 to share.
 }
 }
