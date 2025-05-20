@@ -3,7 +3,6 @@
   scribble/html
   racket/string
   racket/set
-  "util.rkt"
   "preamble.rkt"
   "pvd.rkt"
 ]
