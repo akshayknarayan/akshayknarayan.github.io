@@ -4,7 +4,9 @@
   racket/string
   racket/set
   "preamble.rkt"
+  "util.rkt"
   "pvd.rkt"
+  "bos.rkt"
 ]
 
 @(define (style) (list  
@@ -22,5 +24,11 @@
 }
 @body{
 @preamble
-@pvd
+
+@city[#:name "Providence"
+      #:abbrv "pvd"
+      @pvd]
+@city[#:name "Boston"
+      #:abbrv "bos"
+      @bos]
 }}
