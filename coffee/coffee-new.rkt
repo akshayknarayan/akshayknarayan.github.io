@@ -7,6 +7,9 @@
   "util.rkt"
   "pvd.rkt"
   "bos.rkt"
+  "berkeley.rkt"
+  "sf.rkt"
+  "southbay.rkt"
 ]
 
 @(define (style) (list  
@@ -31,4 +34,13 @@
 @city[#:name "Boston"
       #:abbrv "bos"
       @bos]
+@city[#:name "Berkeley"
+      #:abbrv "berkeley"
+      @berkeley]
+@city[#:name "SF"
+      #:abbrv "sf"
+      @sf]
+@city[#:name "South Bay"
+      #:abbrv "southbay"
+      @southbay]
 }}
