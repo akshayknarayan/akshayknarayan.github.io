@@ -5,6 +5,7 @@
   racket/set
   racket/math
   net/uri-codec
+  "preamble.rkt"
 ]
 
 @provide[
@@ -39,7 +40,10 @@
 @(define (annotation cafe base_tile_x base_tile_y)
   @(define xy (latlon_to_pixel_offset (cafe-lat cafe) (cafe-lon cafe) zoom base_tile_x base_tile_y))
   @a[class: "annotation" 
-     style: (format "left: ~apx; top: ~apx;" (car xy) (cdr xy))
+     style: (format "left: ~apx; top: ~apx; background-color: ~a;" 
+                    (car xy) 
+                    (cdr xy)
+                    (if (cafe-scouting cafe) @scouting-report-color "#2aa198"))
      data-label: (cafe-name cafe)
      href: (gmap-link cafe)
   ]
@@ -78,7 +82,7 @@
 
 @(define cafe-list (mutable-set))
 
-@(struct cafe (name url address lat lon show) #:transparent)
+@(struct cafe (name url address lat lon show scouting) #:transparent)
 @(define (gmap-link cafe) (format "https://google.com/maps?q=~a+(@~a,~a)" 
                             (uri-encode (cafe-address cafe)) 
                             (cafe-lat cafe) 
@@ -100,11 +104,12 @@
     #:url url
     #:address address
     #:latlon location
-    #:show [show #t])
+    #:show [show #t]
+    #:scouting [scouting #f])
     @(let* ([latlon (string-split location ",")]
             [lat (string->number (string-trim (first latlon)))]
             [lon (string->number (string-trim (second latlon)))]
-            [c (cafe name url address lat lon show)])
+            [c (cafe name url address lat lon show scouting)])
       (set-add! cafe-list c)
       c
     ))

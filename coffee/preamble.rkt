@@ -1,8 +1,10 @@
 #lang scribble/html
 
-@provide[preamble scouting-report]
+@provide[preamble scouting-report scouting-report-color scouting-report-label]
 
-@(define (scouting-report text) @span[style:"color:#ff6347" text])
+@(define scouting-report-color "#ff6347")
+@(define (scouting-report text) @span[style: (string-append "color:" scouting-report-color) text])
+@(define (scouting-report-label) @scouting-report{Scouting Report:})
 
 @(define (preamble) @div{
 @h1{Coffee Recommendations}
