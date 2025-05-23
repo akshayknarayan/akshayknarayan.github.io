@@ -1,7 +1,6 @@
 #lang scribble/html
 
-@require["util.rkt"
-         "preamble.rkt"]
+@require["util.rkt"]
 
 @provide[southbay]
 
