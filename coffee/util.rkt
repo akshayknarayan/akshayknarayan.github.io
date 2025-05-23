@@ -49,10 +49,34 @@
   ]
 )
 
+@(define (expand-cafe c)
+  ; new address and lat/lon for each cafe-additional-locations, copy name and URL
+  ; clear additional-locations after
+  @(list*
+    (cafe
+        (cafe-name c)
+        (cafe-url c)
+        (cafe-address c)
+        (cafe-lat c)
+        (cafe-lon c)
+        '()
+        (cafe-show c)
+        (cafe-scouting c))
+    (for/list ([a (cafe-additional-locations c)]) (cafe
+        (cafe-name c)
+        (cafe-url c)
+        (car a)
+        (car (cdr a))
+        (cdr (cdr a))
+        '()
+        (cafe-show c)
+        (cafe-scouting c)))))
+
 @(define zoom 13)
 @(define (map-cafes cafes)
-  (define xtiles (for/list ([c cafes]) (floor (lon_to_xtile (cafe-lon c) zoom))))
-  (define ytiles (for/list ([c cafes]) (floor (lat_to_ytile (cafe-lat c) zoom))))
+  (define all-cafes (flatten (for/list ([c cafes]) (expand-cafe c))))
+  (define xtiles (for/list ([c all-cafes]) (floor (lon_to_xtile (cafe-lon c) zoom))))
+  (define ytiles (for/list ([c all-cafes]) (floor (lat_to_ytile (cafe-lat c) zoom))))
   (define min-xtile (apply min xtiles))
   (define max-xtile (apply max xtiles))
   (define min-ytile (apply min ytiles))
@@ -75,14 +99,14 @@
                             (inexact->exact (* 256 (- x min-xtile))) 
                             (inexact->exact (* 256 (- y min-ytile))))
         ])
-      @(for/list ([c cafes])
+      @(for/list ([c all-cafes])
          @(annotation c min-xtile min-ytile)
       )}}
   }})
 
 @(define cafe-list (mutable-set))
 
-@(struct cafe (name url address lat lon show scouting) #:transparent)
+@(struct cafe (name url address lat lon additional-locations show scouting) #:transparent)
 @(define (gmap-link cafe) (format "https://google.com/maps?q=~a+(@~a,~a)" 
                             (uri-encode (cafe-address cafe)) 
                             (cafe-lat cafe) 
@@ -92,6 +116,11 @@
   (if (cafe-show cafe)
       @a[href: (cafe-url cafe) (cafe-name cafe)]
       @(list @a[href: (cafe-url cafe) (cafe-name cafe)] " " @a[href: (gmap-link cafe)]{(📍)})))
+
+@(define (parse-lat-lon str)
+  @(define latlon (for/list ([num-str (string-split str ",")]) (string->number (string-trim num-str))))
+  (cons (first latlon) (second latlon))
+)
 
 @(define (city 
           #:name name 
@@ -104,12 +133,21 @@
     #:url url
     #:address address
     #:latlon location
+    #:additional-locations [addr-loc-list '()] ; list of address . "lat, lon"
     #:show [show #t]
     #:scouting [scouting #f])
-    @(let* ([latlon (string-split location ",")]
-            [lat (string->number (string-trim (first latlon)))]
-            [lon (string->number (string-trim (second latlon)))]
-            [c (cafe name url address lat lon show scouting)])
+    @(let* ([latlon (parse-lat-lon location)]
+            [c (cafe
+                   name
+                   url
+                   address
+                   (car latlon)
+                   (cdr latlon)
+                   (for/list ([addr-loc addr-loc-list])
+                     (cons (car addr-loc)
+                           (parse-lat-lon (cdr addr-loc))))
+                   show
+                   scouting)])
       (set-add! cafe-list c)
       c
     ))
