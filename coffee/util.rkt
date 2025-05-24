@@ -10,6 +10,9 @@
 
 @provide[
   link-cafe 
+  make-location
+  cafe-location
+  cafe-additional-locations
   ; Given a list of cafes, produce a map showing them.
   city]
 
@@ -38,45 +41,39 @@
   (format "https://a.basemaps.cartocdn.com/rastertiles/voyager/~a/~a/~a.png" zoom x y))
 
 @(define (annotation cafe base_tile_x base_tile_y)
-  @(define xy (latlon_to_pixel_offset (cafe-lat cafe) (cafe-lon cafe) zoom base_tile_x base_tile_y))
+  (define xy (latlon_to_pixel_offset (location-lat (cafe-location cafe)) (location-lon (cafe-location cafe)) zoom base_tile_x base_tile_y))
   @a[class: "annotation" 
      style: (format "left: ~apx; top: ~apx; background-color: ~a;" 
                     (car xy) 
                     (cdr xy)
                     (if (cafe-scouting cafe) @scouting-report-color "#2aa198"))
      data-label: (cafe-name cafe)
-     href: (gmap-link cafe)
+     href: (gmap-link (cafe-location cafe))
   ]
 )
 
 @(define (expand-cafe c)
   ; new address and lat/lon for each cafe-additional-locations, copy name and URL
   ; clear additional-locations after
-  @(list*
+  (list*
     (cafe
         (cafe-name c)
         (cafe-url c)
-        (cafe-address c)
-        (cafe-lat c)
-        (cafe-lon c)
+        (cafe-location c)
         '()
-        (cafe-show c)
         (cafe-scouting c))
-    (for/list ([a (cafe-additional-locations c)]) (cafe
+    (for/list ([l (cafe-additional-locations c)]) (cafe
         (cafe-name c)
         (cafe-url c)
-        (car a)
-        (car (cdr a))
-        (cdr (cdr a))
+        l
         '()
-        (cafe-show c)
         (cafe-scouting c)))))
 
 @(define zoom 13)
 @(define (map-cafes cafes)
-  (define all-cafes (flatten (for/list ([c cafes]) (expand-cafe c))))
-  (define xtiles (for/list ([c all-cafes]) (floor (lon_to_xtile (cafe-lon c) zoom))))
-  (define ytiles (for/list ([c all-cafes]) (floor (lat_to_ytile (cafe-lat c) zoom))))
+  (define all-cafes (filter (compose1 location-show cafe-location) (flatten (for/list ([c cafes]) (expand-cafe c)))))
+  (define xtiles (for/list ([c all-cafes]) (floor (lon_to_xtile (location-lon (cafe-location c)) zoom))))
+  (define ytiles (for/list ([c all-cafes]) (floor (lat_to_ytile (location-lat (cafe-location c)) zoom))))
   (define min-xtile (apply min xtiles))
   (define max-xtile (apply max xtiles))
   (define min-ytile (apply min ytiles))
@@ -104,58 +101,54 @@
       )}}
   }})
 
-@(define cafe-list (mutable-set))
+@(struct location (address lat lon show) #:transparent)
+@(define (make-location #:address address
+                        #:latlon coords
+                        #:show [show #t])
+  (define (parse-lat-lon str)
+    (define latlon (for/list ([num-str (string-split str ",")]) (string->number (string-trim num-str))))
+    (cons (first latlon) (second latlon)))
+  (define latlon (parse-lat-lon coords))
+  (location address (car latlon) (cdr latlon) show))
 
-@(struct cafe (name url address lat lon additional-locations show scouting) #:transparent)
-@(define (gmap-link cafe) (format "https://google.com/maps?q=~a+(@~a,~a)" 
-                            (uri-encode (cafe-address cafe)) 
-                            (cafe-lat cafe) 
-                            (cafe-lon cafe)))
+@(define (gmap-link loc) (format "https://google.com/maps?q=~a+(@~a,~a)" 
+                            (uri-encode (location-address loc)) 
+                            (location-lat loc) 
+                            (location-lon loc)))
+
+@(struct cafe (name url location additional-locations scouting) #:transparent)
    
-@(define (link-cafe cafe)
-  (if (cafe-show cafe)
-      @a[href: (cafe-url cafe) (cafe-name cafe)]
-      @(list @a[href: (cafe-url cafe) (cafe-name cafe)] " " @a[href: (gmap-link cafe)]{(📍)})))
-
-@(define (parse-lat-lon str)
-  @(define latlon (for/list ([num-str (string-split str ",")]) (string->number (string-trim num-str))))
-  (cons (first latlon) (second latlon))
-)
+@(define (link-cafe cafe [name (cafe-name cafe)] [show-pin (list #f cafe-location)])
+  ; if show-pin is given, show a pin link to the specified location.
+  ; by default, if the cafe wasn't shown, show a pin link to the primary location.
+  (define name-link @a[href: (cafe-url cafe) name])
+  (if (first show-pin)
+      (list @name-link " " @a[href: (gmap-link ((second show-pin) cafe))]{(📍)})
+      (if (location-show (cafe-location cafe))
+          @name-link
+          (list @name-link " " @a[href: (gmap-link (cafe-location cafe))]{(📍)}))))
 
 @(define (city 
           #:name name 
           #:abbrv abbrv 
           body)
   ; Finally, declare a city block
-  @(define cafe-list (mutable-set))
-  @(define (make-cafe
+  (define cafe-list (mutable-set))
+  (define (make-cafe
     #:name name
     #:url url
-    #:address address
-    #:latlon location
-    #:additional-locations [addr-loc-list '()] ; list of address . "lat, lon"
-    #:show [show #t]
+    #:location location
+    #:additional-locations [addr-loc-list '()] ; list of location
     #:scouting [scouting #f])
-    @(let* ([latlon (parse-lat-lon location)]
-            [c (cafe
-                   name
-                   url
-                   address
-                   (car latlon)
-                   (cdr latlon)
-                   (for/list ([addr-loc addr-loc-list])
-                     (cons (car addr-loc)
-                           (parse-lat-lon (cdr addr-loc))))
-                   show
-                   scouting)])
+    (let* ([c (cafe name url location addr-loc-list scouting)])
       (set-add! cafe-list c)
       c
     ))
   ; evaluate the body, populating cafe-list
-  @(define paras (body make-cafe))
+  (define paras (body make-cafe))
 
   @text{
   @h4[id: abbrv name]{ @a[href: (string-append "#" abbrv)]{☕︎}}
-  @(map-cafes (filter cafe-show (set->list cafe-list)))
+  @(map-cafes (set->list cafe-list))
   @div[style: "text-align:left; display:inline-block"]{@ul{@(for/list ([p paras]) @li[p])}}
   })

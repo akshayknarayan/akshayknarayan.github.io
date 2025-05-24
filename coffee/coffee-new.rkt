@@ -11,6 +11,7 @@
   "sf.rkt"
   "southbay.rkt"
   "ny.rkt"
+  "seattle.rkt"
 ]
 
 @(define (style) (list  
@@ -28,7 +29,6 @@
 }
 @body{
 @preamble
-
 @city[#:name "Providence"
       #:abbrv "pvd"
       @pvd]
@@ -47,4 +47,7 @@
 @city[#:name "New York"
       #:abbrv "nyc"
       @ny]
+@city[#:name "Seattle"
+      #:abbrv "sea"
+      @seattle]
 }}
