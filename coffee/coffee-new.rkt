@@ -12,6 +12,7 @@
   "southbay.rkt"
   "ny.rkt"
   "seattle.rkt"
+  "anz.rkt"
 ]
 
 @(define (style) (list  
@@ -50,4 +51,7 @@
 @city[#:name "Seattle"
       #:abbrv "sea"
       @seattle]
+@city[#:name "Australia/New Zealand"
+      #:abbrv "anz"
+      @anz]
 }}

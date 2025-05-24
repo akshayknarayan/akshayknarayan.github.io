@@ -149,6 +149,6 @@
 
   @text{
   @h4[id: abbrv name]{ @a[href: (string-append "#" abbrv)]{☕︎}}
-  @(map-cafes (set->list cafe-list))
+  @(if (not (set-empty? cafe-list)) (map-cafes (set->list cafe-list)) '())
   @div[style: "text-align:left; display:inline-block"]{@ul{@(for/list ([p paras]) @li[p])}}
   })
