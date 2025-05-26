@@ -2,7 +2,7 @@
 
 @require["util.rkt"]
                           
-@provide[ny])
+@provide[ny]
 
 @(define (ny make-cafe) (list
   @text{
