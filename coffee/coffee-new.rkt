@@ -145,5 +145,4 @@
   @city[#:name "Zurich"
         #:abbrv "zurich"
         @zurich]
-  }
-}
+}}
