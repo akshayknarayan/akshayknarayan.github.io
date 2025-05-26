@@ -21,8 +21,7 @@
       #:name "Floret"
       #:url "http://floretseattle.com/"
       #:location (make-location #:address "Gate A1, SeaTac Airport, SeaTac, WA" 
-                                #:latlon "47.4427, -122.3022"
-                                #:show #f)
+                                #:latlon "47.4427, -122.3022")
     ]],
     in SeaTac Airport near the A gates, which has Stumptown beans and surprisingly good coffee for an airport. It's also a great option for vegetarian food at the airport.
   }
@@ -33,8 +32,7 @@
       #:name "Third Culture Coffee"
       #:url "https://thirdculturecoffee.com/"
       #:location (make-location #:address "80 102nd Ave NE, Bellevue, WA 98004" 
-                                #:latlon "47.6108, -122.2041"
-                                #:show #f)
+                                #:latlon "47.6108, -122.2041")
     ]]
     is a good option, also with has Indian-inspired options like filter coffee and chai.
   }
@@ -45,8 +43,7 @@
       #:name "Boon Boona Coffee"
       #:url "https://www.boonboonacoffee.com/"
       #:location (make-location #:address "724 S 3rd Street, Ste. C, Renton, WA 98057" 
-                                #:latlon "47.4798, -122.2067"
-                                #:show #f)
+                                #:latlon "47.4798, -122.2067")
       #:additional-locations @(list
         (make-location #:address "1223 East Cherry Street Ste. C121B, Seattle, WA 98122" 
                        #:latlon "47.6076, -122.3167")
@@ -62,12 +59,10 @@
       #:name "Five Stones"
       #:url "https://5stonescoffeeco.com/"
       #:location (make-location #:address "8102 161st Avenue NE Redmond, WA 98052" 
-                                #:latlon "47.6763, -122.1254"
-                                #:show #f)
+                                #:latlon "47.6763, -122.1254")
       #:additional-locations @(list
         (make-location #:address "312 Central Way Kirkland, WA 98033" 
-                       #:latlon "47.6777, -122.2029"
-                       #:show #f))
+                       #:latlon "47.6777, -122.2029"))
     ]]
     in Redmond will make you a @a[href: "https://en.wikipedia.org/wiki/Cappuccino#Capuccino_Freddo"]{cappuccino freddo}, which is not something you usually see.
   }

@@ -13,6 +13,7 @@
   make-location
   cafe-location
   cafe-additional-locations
+  fmt-paras
   ; Given a list of cafes, produce a map showing them.
   city]
 
@@ -40,7 +41,7 @@
 @(define (maptile-url x y zoom)
   (format "https://a.basemaps.cartocdn.com/rastertiles/voyager/~a/~a/~a.png" zoom x y))
 
-@(define (annotation cafe base_tile_x base_tile_y)
+@(define (annotation cafe zoom base_tile_x base_tile_y)
   (define xy (latlon_to_pixel_offset (location-lat (cafe-location cafe)) (location-lon (cafe-location cafe)) zoom base_tile_x base_tile_y))
   @a[class: "annotation" 
      style: (format "left: ~apx; top: ~apx; background-color: ~a;" 
@@ -69,8 +70,7 @@
         '()
         (cafe-scouting c)))))
 
-@(define zoom 13)
-@(define (map-cafes cafes)
+@(define (map-cafes #:cafes cafes #:zoom zoom)
   (define all-cafes (filter (compose1 location-show cafe-location) (flatten (for/list ([c cafes]) (expand-cafe c)))))
   (define xtiles (for/list ([c all-cafes]) (floor (lon_to_xtile (location-lon (cafe-location c)) zoom))))
   (define ytiles (for/list ([c all-cafes]) (floor (lat_to_ytile (location-lat (cafe-location c)) zoom))))
@@ -97,7 +97,7 @@
                             (inexact->exact (* 256 (- y min-ytile))))
         ])
       @(for/list ([c all-cafes])
-         @(annotation c min-xtile min-ytile)
+         @(annotation c zoom min-xtile min-ytile)
       )}}
   }})
 
@@ -128,10 +128,13 @@
           @name-link
           (list @name-link " " @a[href: (gmap-link (cafe-location cafe))]{(📍)}))))
 
+@(define (fmt-paras ps) @ul{@(for/list ([p ps]) @li[p])})
+
 @(define (city 
           #:name name 
           #:abbrv abbrv 
-          body)
+          #:mapzoom [zoom 13]
+          body-fn)
   ; Finally, declare a city block
   (define cafe-list (mutable-set))
   (define (make-cafe
@@ -145,10 +148,13 @@
       c
     ))
   ; evaluate the body, populating cafe-list
-  (define paras (body make-cafe))
+  (define body (body-fn make-cafe))
 
   @text{
   @h4[id: abbrv name]{ @a[href: (string-append "#" abbrv)]{☕︎}}
-  @(if (not (set-empty? cafe-list)) (map-cafes (set->list cafe-list)) '())
-  @div[style: "text-align:left; display:inline-block"]{@ul{@(for/list ([p paras]) @li[p])}}
+  @(if (not (set-empty? cafe-list)) (map-cafes #:cafes (set->list cafe-list) #:zoom zoom) '())
+  @div[style: "text-align:left; display:inline-block"]{
+    @(if (list? body) 
+         @ul{@(for/list ([p body]) @li[p])}
+         body)}
   })
