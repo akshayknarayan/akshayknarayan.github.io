@@ -49,7 +49,6 @@
     }
 
     @text{
-      <a href="https://bluetokaicoffee.com/pages/our-cafes">Blue Tokai</a> 
       @link-cafe[@make-cafe[
         #:name "Blue Tokai"
         #:url "https://bluetokaicoffee.com"
@@ -64,7 +63,6 @@
 
     @text{
       In Kala Ghoda, 
-      <a href="http://kgcafe.in/">Kala Ghoda Cafe</a> 
       @link-cafe[@make-cafe[
         #:name "Kala Ghoda Cafe"
         #:url "http://kgcafe.in/"

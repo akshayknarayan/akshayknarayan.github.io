@@ -4,8 +4,7 @@
 
 @provide[pdx]
 
-@(define (pdx make-cafe)
-  @(list
+@(define (pdx make-cafe) (list
   @text{
     @link-cafe[@make-cafe[
       #:name "Stumptown"

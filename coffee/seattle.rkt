@@ -4,8 +4,7 @@
 
 @provide[seattle]
 
-@(define (seattle make-cafe)
-  @(list
+@(define (seattle make-cafe) (list
   @text{
     @link-cafe[@make-cafe[
       #:name "Espresso Vivace"
@@ -44,7 +43,7 @@
       #:url "https://www.boonboonacoffee.com/"
       #:location (make-location #:address "724 S 3rd Street, Ste. C, Renton, WA 98057" 
                                 #:latlon "47.4798, -122.2067")
-      #:additional-locations @(list
+      #:additional-locations (list
         (make-location #:address "1223 East Cherry Street Ste. C121B, Seattle, WA 98122" 
                        #:latlon "47.6076, -122.3167")
         (make-location #:address "4326 University Way NE, Seattle, WA 98105" 
@@ -60,7 +59,7 @@
       #:url "https://5stonescoffeeco.com/"
       #:location (make-location #:address "8102 161st Avenue NE Redmond, WA 98052" 
                                 #:latlon "47.6763, -122.1254")
-      #:additional-locations @(list
+      #:additional-locations (list
         (make-location #:address "312 Central Way Kirkland, WA 98033" 
                        #:latlon "47.6777, -122.2029"))
     ]]
@@ -90,12 +89,11 @@
       #:url "https://www.victrolacoffee.com/pages/locations"
       #:location (make-location #:address "310 E Pike St, Seattle, WA 98122" 
                                 #:latlon "47.6143, -122.3273")
-      #:additional-locations @(list
+      #:additional-locations (list
         (make-location #:address "411 15th Ave E, Seattle, WA 98112" 
                        #:latlon "47.6223, -122.3128")
         (make-location #:address "300 Pine St Suite 100, Seattle, WA 98101" 
                        #:latlon "47.6109, -122.3386"))
       #:scouting #t
     ]].
-  }
-  ))
+  }))

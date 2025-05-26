@@ -4,8 +4,7 @@
 
 @provide[ams]
 
-@(define (ams make-cafe)
-  @(list
+@(define (ams make-cafe) (list
   @text{
     @link-cafe[@make-cafe[
       #:name "Coffee District"

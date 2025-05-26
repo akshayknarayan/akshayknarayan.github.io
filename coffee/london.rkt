@@ -4,8 +4,7 @@
 
 @provide[london]
 
-@(define (london make-cafe)
-  @(list
+@(define (london make-cafe) (list
   @text{
     @link-cafe[@make-cafe[
           #:name "Prufrock Coffee"

@@ -4,8 +4,7 @@
                           
 @provide[ny])
 
-@(define (ny make-cafe)
-  @(list
+@(define (ny make-cafe) (list
   @text{
     In Greenwich Village there is 
     @link-cafe[@make-cafe[
@@ -38,7 +37,9 @@
       #:location (make-location #:address "18 W 29th Street New York, NY 10001" 
                                 #:latlon "40.7331, -73.9901")
     ]]
-    is a good option. There is also a @a[href: "https://www.blackseedbagels.com/"]{Black Seed Bagels} around the corner.
+    is a good option. There is also a 
+    @a[href: "https://www.blackseedbagels.com/"]{Black Seed Bagels}
+    around the corner.
   }
     
   @text{
@@ -48,7 +49,7 @@
       #:url "https://www.devocion.com/pages/cafes"
       #:location (make-location #:address "25 East 20th Street New York, NY 10003" 
                                 #:latlon "40.7390, -73.9892")
-      #:additional-locations @(list
+      #:additional-locations (list
         (make-location #:address "1134 Broadway, New York, NY 10010"           #:latlon  "40.7435, -73.9890")
         (make-location #:address "600 Lexington Ave, New York, NY 10022"       #:latlon  "40.7581, -73.9713")
         (make-location #:address "105 York St. Brooklyn, NY 11201"             #:latlon  "40.7017, -73.9866")
@@ -61,7 +62,7 @@
       #:url "https://787coffee.com/"
       #:location (make-location #:address "131 East 7th St. New York, NY" 
                                 #:latlon "40.7263, -73.9839")
-      #:additional-locations @(list
+      #:additional-locations (list
         (make-location #:address "101 2nd Ave, New York, NY 10003"          #:latlon "40.7274, -73.9888")
         (make-location #:address "159 2nd Ave, New York, NY 10003"          #:latlon "40.7298, -73.9871")
         (make-location #:address "66 Pearl St, New York, NY 10004"          #:latlon "40.7036, -74.0109")
@@ -85,7 +86,7 @@
       #:url "https://felixroastingco.com/pages/visit-us"
       #:location (make-location #:address "450 Park Ave S, New York, NY" 
                                 #:latlon "40.7263, -73.9839")
-      #:additional-locations @(list 
+      #:additional-locations (list 
         (make-location #:address "280 Park Avenue, New York, NY"  #:latlon "40.7568, -73.9749")
         (make-location #:address "145 Greene St, New York, NY"    #:latlon "40.7261, -73.9987")
         (make-location #:address "525 Greenwich St, New York, NY" #:latlon "40.7264, -74.0089"))
@@ -96,7 +97,7 @@
       #:url "https://blackfoxcoffee.com/pages/locations"
       #:location (make-location #:address "438 West 33rd Street Pendry Hotel Manhattan West New York, NY 10001" 
                                 #:latlon "40.7533, -73.9983")
-      #:additional-locations @(list 
+      #:additional-locations (list 
         (make-location #:address "550 Madison Ave, New York, NY"     #:latlon "40.7613, -73.9738")
         (make-location #:address "70 Pine Street, New York, NY"      #:latlon "40.7065, -74.0078")
         (make-location #:address "45 East 45th Street, New York, NY" #:latlon "40.7546, -73.9773"))
@@ -122,7 +123,7 @@
       #:url "https://www.butler-nyc.com/"
       #:location (make-location #:address "40 Water St, Brooklyn, NY 11201" 
                                 #:latlon "40.7032, -73.9924")
-      #:additional-locations @(list 
+      #:additional-locations (list 
         (make-location #:address "177 Lafayette St New York, NY 10013"    #:latlon "40.7204, -73.9985")
         (make-location #:address "95 South 5th Street Brooklyn, NY 11249" #:latlon "40.7117, -73.9646")
         (make-location #:address "101 North 8th St Brooklyn, NY 11211"    #:latlon "40.7198, -73.9591"))

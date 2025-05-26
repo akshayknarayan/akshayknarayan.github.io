@@ -4,8 +4,7 @@
 
 @provide[norcal]
 
-@(define (norcal make-cafe)
-  @(list
+@(define (norcal make-cafe) (list
   @text{
     In Redding,
     @link-cafe[@make-cafe[
@@ -13,12 +12,13 @@
       #:url "https://theorycoffee.com/"
       #:location (make-location #:address "1250 California Street Redding, CA 96001" 
                                 #:latlon "40.5865, -122.3935")
-      #:additional-locations @(list
+      #:additional-locations (list
         (make-location #:address "1401 Hilltop Drive Suite E5 Redding, CA 96003"
                        #:latlon "40.5881, -122.3570")
         (make-location #:address "228 N Mt Shasta Blvd, Mount Shasta CA 96067"
                        #:latlon "41.3132, -122.3120"))
-    ]] is a good option.}
+    ]] is a good option.
+  }
 
   @text{
     In Crescent City (near the north border of Redwoods National Park), 

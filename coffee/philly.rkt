@@ -42,5 +42,5 @@
           (make-location #:address "1600 Market St, Philadelphia, PA 19103"
                          #:latlon "39.9527, -75.167"))
         #:scouting #t
-      ]]
+      ]].
     }))

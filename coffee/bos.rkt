@@ -42,6 +42,7 @@
     ]]
     is also great: the flavor is well balanced, and the baristas pour excellently. 
   }
+
   @text{
     @link-cafe[@make-cafe[
       #:name "Bakey"
@@ -104,7 +105,10 @@
   }
  
   @text{
-    @link-cafe[pavement] is a good option if you're in Back Bay (there is now also a Pavement @link-cafe[pavement "location" (list #t (compose1 fourth cafe-additional-locations))] in Harvard Square, in the student center). 
+    @link-cafe[pavement] is a good option if you're in Back Bay 
+    (there is now also a Pavement 
+    @link-cafe[pavement "location" (list #t (compose1 fourth cafe-additional-locations))] 
+    in Harvard Square, in the student center). 
     @link-cafe[@make-cafe[
       #:name "Flat Black"
       #:url "https://flatblackcoffee.com/"
@@ -112,5 +116,6 @@
                                 #:latlon "42.2724, -71.0684"
                                 #:show #f)
     ]]
-    is operated by Australians and thus has flat whites (the one near Downtown did not survive the pandemic; the remaining cafe is close to the Red Line's Mattapan Trolley extension near Ashmont).
+    is operated by Australians and thus has flat whites (the one near Downtown did not survive the pandemic;
+    the remaining cafe is close to the Red Line's Mattapan Trolley extension near Ashmont).
   })))

@@ -4,8 +4,7 @@
 
 @provide[southbay]
 
-@(define (southbay make-cafe)
-  @(list
+@(define (southbay make-cafe) (list
   @text{
     @link-cafe[@make-cafe[
       #:name "Cafe Venetia"
