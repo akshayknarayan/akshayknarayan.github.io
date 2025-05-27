@@ -83,13 +83,15 @@
                   (inclusive-range min-ytile max-ytile)))
   @text{@div[
     class: "map-container" 
-    style: (format "width:~apx; height:~apx;" (pixel-size min-xtile max-xtile) (pixel-size min-ytile max-ytile))
+    style: (format "width:~apx; height:~apx;"
+                   (pixel-size min-xtile max-xtile)
+                   (pixel-size min-ytile max-ytile))
   ]{
     @div[class: "map"]{
       @text{
       @(for/list ([t tiles])
-        @(define x (first t))
-        @(define y (second t))
+        (define x (first t))
+        (define y (second t))
         @img[class: "tile"
              src: (maptile-url x y zoom)
              style: (format "left: ~apx; top: ~apx;" 
@@ -97,7 +99,7 @@
                             (inexact->exact (* 256 (- y min-ytile))))
         ])
       @(for/list ([c all-cafes])
-         @(annotation c zoom min-xtile min-ytile)
+         (annotation c zoom min-xtile min-ytile)
       )}}
   }})
 
@@ -128,7 +130,9 @@
           @name-link
           (list @name-link " " @a[href: (gmap-link (cafe-location cafe))]{(📍)}))))
 
-@(define (fmt-paras ps) @ul{@(for/list ([p ps]) @li[p])})
+@(define (fmt-paras ps) (if (> (length ps) 1)
+                            @ul{@(for/list ([p ps]) @li[p])}
+                            @p[class: "ul-aligned-para" ps]))
 
 @(define (city 
           #:name name 
@@ -151,10 +155,13 @@
   (define body (body-fn make-cafe))
 
   @text{
-  @h4[id: abbrv name]{ @a[href: (string-append "#" abbrv)]{☕︎}}
-  @(if (not (set-empty? cafe-list)) (map-cafes #:cafes (set->list cafe-list) #:zoom zoom) '())
-  @div[style: "text-align:left; display:inline-block"]{
+  @h2[id: abbrv name]{ @a[href: (string-append "#" abbrv)]{☕︎}}
+  @div[style: "display: flex; flex-wrap: wrap-reverse; align-items: flex-end; gap: 20px;"]{
+  @div[style: "text-align:left; flex: 1; min-width: 500px;"]{
     @(if (list? body) 
-         @ul{@(for/list ([p body]) @li[p])}
+         (fmt-paras body)
          body)}
-  })
+  @(if (not (set-empty? cafe-list)) 
+       (map-cafes #:cafes (set->list cafe-list) #:zoom zoom) 
+       '())
+  }})

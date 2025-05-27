@@ -6,7 +6,7 @@
 
 @(define (spain make-cafe)
   @div{
-    @h5[style: "margin-left:5%"]{Barcelona}
+    @h3[style: "margin-left:5%"]{Barcelona}
     @(fmt-paras (list
       @text{
         @link-cafe[@make-cafe[
@@ -52,7 +52,7 @@
         is good.
       }))
 
-    @h5[style: "margin-left:5%"]{Madrid}
+    @h3[style: "margin-left:5%"]{Madrid}
     @(fmt-paras (list
       @text{
         In Madrid, 
@@ -69,7 +69,7 @@
       }
     ))
     
-    @h5[style: "margin-left:5%"]{Andalusia}
+    @h3[style: "margin-left:5%"]{Andalusia}
     @(fmt-paras (list
       @text{
       In Sevilla,

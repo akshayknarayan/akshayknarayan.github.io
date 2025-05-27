@@ -5,11 +5,11 @@
 @provide[hawaii]
 
 @(define (hawaii make-cafe) @div{
-  @p{
+  @p[class: "ul-aligned-para"]{
     Hawai'i (the state) has a coffee growing industry, thanks to the volcanoes. Most of the growing happens on Hawai'i (the island), in particular @a[href: "https://en.wikipedia.org/wiki/Kona_coffee"]{Kona coffee}. It's certainly possible to get mass-market coffee (Starbucks, Lavazza, etc) here, but it's worth sampling the local product.
   }
 
-  @h5[style: "margin-left:5%"]{O'ahu}
+  @h3[style: "margin-left:5%"]{O'ahu}
   @(fmt-paras (list
     @text{
       The best coffee I had in Honolulu was at 
@@ -55,7 +55,7 @@
       though promising, were too crowded to evaluate properly.
     }))
 
-  @h5[style: "margin-left:5%"]{Hawai'i ("Big Island")}
+  @h3[style: "margin-left:5%"]{Hawai'i ("Big Island")}
   @(fmt-paras (list
   @text{
     @link-cafe[@make-cafe[
@@ -97,7 +97,7 @@
     which is a promising place for Ka'u coffee, another big coffee growing region on the island.
   }))
 
-  @h5[style: "margin-left:5%"]{Kaua'i}
+  @h3[style: "margin-left:5%"]{Kaua'i}
   @(fmt-paras (list
   @text{
     @link-cafe[@make-cafe[

@@ -6,7 +6,7 @@
 
 @(define (zurich make-cafe)
   @div{
-    @p{
+    @p[class: "ul-aligned-para"]{
       @scouting-report-label from our Zürich coffee correspondents, 
       @a[href: "https://gavinleroy.com/writings/zuerich-kaffee.html"]{Gavin} 
       and Albert:
@@ -73,7 +73,7 @@
       gets an honorable mention from Gavin, but a demerit for being too snobby.
     }))
 
-    @p{Bonus @scouting-report{scouting report} from Gavin for other European cities:}
+    @p[class: "ul-aligned-para"]{Bonus @scouting-report{scouting report} from Gavin for other European cities:}
 
     @(fmt-paras (list
       @text{

@@ -6,11 +6,11 @@
 
 @(define (india make-cafe)
   @div{
-    @p{
+    @p[class: "ul-aligned-para"]{
       Note: Indians mostly drink filter coffee. You can get this basically anywhere, so this list focuses on fancier and more westernized (i.e., cappuccino) places.
     }
 
-    @h5[style: "margin-left:5%"]{Chennai}
+    @h3[style: "margin-left:5%"]{Chennai}
     @(fmt-paras (list
       @text{
         @link-cafe[@make-cafe[
@@ -35,7 +35,7 @@
         in Alwarpet.
       }))
     
-    @h5[style: "margin-left:5%"]{Mumbai}
+    @h3[style: "margin-left:5%"]{Mumbai}
     @(fmt-paras (list
     @text{
       @link-cafe[@make-cafe[

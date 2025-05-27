@@ -6,7 +6,7 @@
 
 @(define (rhein-main make-cafe)
   @div{
-    @h5[style: "margin-left:5%"]{Mainz}
+    @h3[style: "margin-left:5%"]{Mainz}
     @(fmt-paras (list
       @text{
         In Altstadt,

@@ -1,11 +1,25 @@
+:root {
+  --li-indent:40px;
+}
+
+ul {
+  padding-left: var(--li-indent);
+}
+
+.ul-aligned-para {
+  padding-left: var(--li-indent);
+}
+
 .map-container {
   display: block;
   margin-left: auto;
   margin-right: auto;
   border: 0px;
   padding: 0px;
+  margin: 0 0 5px 15px;
   font-size: 0;
   border: 1px solid #2aa198;
+  float: right;
 }
 
 .map {
