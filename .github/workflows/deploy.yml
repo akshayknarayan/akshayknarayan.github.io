@@ -1,0 +1,29 @@
+name: Deploy Racket Webpage
+
+on:
+  push:
+    branches:
+      - main  # or your default branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Racket
+        uses: Bogdanp/setup-racket@v1.10
+        with:
+          version: '8.12'  # Adjust to your needed version
+
+      - name: Generate HTML from Racket
+        run: racket coffee/index.rkt > coffee.html
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .  # Or `./dist` if you generate to a subfolder
+          publish_branch: main
