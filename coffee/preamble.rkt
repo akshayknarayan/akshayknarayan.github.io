@@ -18,6 +18,7 @@ This page primarily has recommendations for small and independent coffeeshops;
 if instead you want inexpensive or mass-market coffee, it's not hard to find. For pedants, this page additionally contains recommendations for non-coffee items.
 There are many medium-to-large-ish chains, with varying levels of consistency and quality, for example @a[href: "https://www.lacolombe.com/pages/cafes"]{La Colombe} or @a[href: "https://bluestonelane.com/cafe-and-coffee-shop-locations/"]{Bluestone Lane}. The line between "chain" and "small and independent but with multiple locations" is nebulous; 
 I make no promises of semantic consistency. Cities/regions are in rough descending order of how confident I am in the recommendations. 
+Maps on this page are @a[href: "https://www.openstreetmap.org/copyright"]{OpenStreetMap} data, with tiles served by @a[href: "https://carto.com/basemaps"]{Carto}.
 }
 
 @p{

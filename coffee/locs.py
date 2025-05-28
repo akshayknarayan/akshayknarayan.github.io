@@ -11,8 +11,9 @@ if __name__ == '__main__':
         r = geolocator.geocode(address)
 
         if r != None:
-            loc = f"(make-location #:address \"{address}\" \
-                           #:latlon \"{round(r.latitude, 4)}, {round(r.longitude, 4)}\")"
+            loc = f"\
+(make-location #:address \"{address}\" \
+               #:latlon \"{round(r.latitude, 4)}, {round(r.longitude, 4)}\")"
             print(loc)
         else:
             print(f"could not locate: {address}")

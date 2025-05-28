@@ -35,7 +35,6 @@
   (cons (inexact->exact (round (- x_px (* tile_x 256)))) (inexact->exact (round (- y_px (* tile_y 256)))))
 )
 
-
 @(define (pixel-size min-tile max-tile) (inexact->exact (* 256 (+ 1 (- max-tile min-tile)))))
 
 @(define (maptile-url x y zoom)
