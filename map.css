@@ -16,14 +16,14 @@ ul {
   margin-right: auto;
   border: 0px;
   padding: 0px;
-  margin: 0 0 5px 15px;
+  margin: auto;
   font-size: 0;
-  border: 1px solid #2aa198;
   float: right;
 }
 
 .map {
   position: absolute;
+  border: 1px solid #2aa198;
 }
 
 .tile {
@@ -44,6 +44,7 @@ ul {
   cursor: pointer;
 }
 
+/* desktop site */
 @media(hover: hover) and (pointer: fine) {
   .annotation:hover::after {
     content: attr(data-label);
@@ -60,7 +61,9 @@ ul {
   }
 }
 
+/* mobile site */
 @media(hover: none) or (pointer: coarse) {
+  /* instead of on hover (which phones can't do), just show all the time */
   .annotation::after {
     content: attr(data-label);
     position: absolute;
