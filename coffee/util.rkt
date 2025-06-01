@@ -86,6 +86,7 @@
                    (pixel-size min-xtile max-xtile)
                    (pixel-size min-ytile max-ytile))
   ]{
+    @input[type: "checkbox" class: "toggle" style: "text-align:left;"]{Hide Map}
     @div[class: "map"]{
       @text{
       @(for/list ([t tiles])
@@ -156,7 +157,7 @@
   @text{
   @h2[id: abbrv name]{ @a[href: (string-append "#" abbrv)]{☕︎}}
   @div[style: "display: flex; flex-wrap: wrap-reverse; align-items: flex-end; gap: 20px;"]{
-  @div[style: "text-align:left; flex: 1; min-width: 500px;"]{
+  @div[style: "text-align:left; flex: 1; min-width: 40%;"]{
     @(if (list? body) 
          (fmt-paras body)
          body)}
