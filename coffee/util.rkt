@@ -86,17 +86,20 @@
                    (pixel-size min-xtile max-xtile)
                    (pixel-size min-ytile max-ytile))
   ]{
-    @input[type: "checkbox" class: "toggle" style: "text-align:left;"]{Hide Map}
+    @input[type: "checkbox" class: "toggle"]
+    @span[class: "toggle-label"]
     @div[class: "map"]{
       @text{
       @(for/list ([t tiles])
         (define x (first t))
         (define y (second t))
-        @img[class: "tile"
-             src: (maptile-url x y zoom)
-             style: (format "left: ~apx; top: ~apx;" 
-                            (inexact->exact (* 256 (- x min-xtile))) 
-                            (inexact->exact (* 256 (- y min-ytile))))
+        @div[
+          class: "tile"
+          style: (format "left: ~apx; top: ~apx; background-image: url(~a);"
+            (inexact->exact (* 256 (- x min-xtile)))
+            (inexact->exact (* 256 (- y min-ytile)))
+            (maptile-url x y zoom)
+          )
         ])
       @(for/list ([c all-cafes])
          (annotation c zoom min-xtile min-ytile)
