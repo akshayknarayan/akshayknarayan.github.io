@@ -10,6 +10,12 @@ ul {
   padding-left: var(--li-indent);
 }
 
+.map-container-with-toggle {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .map-container {
   display: block;
   margin-left: auto;
@@ -50,6 +56,11 @@ ul {
   font-size: 16px;
 }
 
+.toggle {
+  transform: scale(2.5);
+  margin: 10px;
+}
+
 /* desktop site */
 @media(hover: hover) and (pointer: fine) {
   .annotation:hover::after {
@@ -70,7 +81,7 @@ ul {
     content: "Hide Map";
   }
   
-  .toggle:checked ~ .map {
+  .toggle:checked ~ .map-container {
     display: none;
   }
 }
@@ -96,11 +107,11 @@ ul {
     content: "Show Map";
   }
 
-  .map {
+  .map-container {
     display: none;
   }
   
-  .toggle:checked ~ .map {
+  .toggle:checked ~ .map-container {
     display: block;
   }
 }

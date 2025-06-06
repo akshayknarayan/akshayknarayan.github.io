@@ -80,14 +80,16 @@
   (define tiles (cartesian-product 
                   (inclusive-range min-xtile max-xtile)
                   (inclusive-range min-ytile max-ytile)))
-  @text{@div[
-    class: "map-container" 
+  @div[class: "map-container-with-toggle"]{
+  @input[type: "checkbox" class: "toggle"]
+  @span[class: "toggle-label"]
+  @br
+  @div[
+    class: "map-container"
     style: (format "width:~apx; height:~apx;"
                    (pixel-size min-xtile max-xtile)
                    (pixel-size min-ytile max-ytile))
   ]{
-    @input[type: "checkbox" class: "toggle"]
-    @span[class: "toggle-label"]
     @div[class: "map"]{
       @text{
       @(for/list ([t tiles])
