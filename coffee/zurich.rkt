@@ -114,16 +114,5 @@
                                     #:latlon "47.7967, 13.0498"
                                     #:show #f)
           #:scouting #t
-        ]].}
-      @text{
-        Paris (France):
-        @link-cafe[@make-cafe[
-          #:name "La Caféothèque"
-          #:url "https://www.lacafeotheque.fr/"
-          #:location (make-location #:address "52 Rue de l'Hôtel de ville, 75004 Paris, France"
-                                    #:latlon "48.8544, 2.3558"
-                                    #:show #f)
-          #:scouting #t
-        ]]. 
-      }))
+        ]].}))
   })

@@ -23,6 +23,7 @@
   "atl.rkt"
   "italy.rkt"
   "spain.rkt"
+  "france.rkt"
   "chicago.rkt"
   "pdx.rkt"
   "austin.rkt"
@@ -94,6 +95,26 @@
   @city[#:name "London"
         #:abbrv "london"
         @london]
+  @city[#:name "Italy"
+        #:abbrv "italy"
+        #:mapzoom 7
+        @italy]
+  @city[#:name "Paris"
+        #:abbrv "paris"
+        #:mapzoom 12
+        @paris]
+  @city[#:name "Barcelona"
+        #:abbrv "bcn"
+        #:mapzoom 13
+        @bcn]
+  @city[#:name "Madrid"
+        #:abbrv "madrid"
+        #:mapzoom 14
+        @madrid]
+  @city[#:name "Andalusia"
+        #:abbrv "andalusia"
+        #:mapzoom 13
+        @andalusia]
   @city[#:name "Amsterdam"
         #:abbrv "ams"
         @ams]
@@ -103,14 +124,6 @@
   @city[#:name "Atlanta"
         #:abbrv "atl"
         @atl]
-  @city[#:name "Italy"
-        #:abbrv "italy"
-        #:mapzoom 7
-        @italy]
-  @city[#:name "Spain"
-        #:abbrv "spain"
-        #:mapzoom 6
-        @spain]
   @city[#:name "Chicago"
         #:abbrv "chicago"
         @chicago]
