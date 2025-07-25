@@ -101,6 +101,14 @@
   @div[style: "text-align:left;"]{
     @h2{Publications}
     @publication[
+      #:title "Kernel Extension DSLs Should Be Verifier-Safe!"
+      #:authors (list "Franco Solleza" "Justus Adam" @me "Malte Schwarzkopf" "Andrew Crotty" "Nesime Tatbul")
+      #:venue "eBPF 2025"
+      #:links (list (cons "./res/bql_sigcomm_2025.pdf" "Paper")
+                    (cons "https://conferences.sigcomm.org/sigcomm/2025/workshop/ebpf/" "Program"))
+    ]
+
+    @publication[
       #:title "Lightweight Automated Reasoning for Network Architectures"
       #:authors (list "Rahul Bothra" "Venkat Arun" "Brighten Godfrey" @me "Ahmed Saeed")
       #:venue "HotNets 2024"
