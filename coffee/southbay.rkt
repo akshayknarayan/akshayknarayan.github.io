@@ -4,7 +4,19 @@
 
 @provide[southbay]
 
-@(define (southbay make-cafe) (list
+@(define (southbay make-cafe)
+  (let* ([
+    voyager @make-cafe[
+      #:name "Voyager"
+      #:url "https://www.voyagercraftcoffeeorders.com"
+      #:location (make-location #:address "389 Jane Stanford Way Stanford, CA 94305"
+                                #:latlon "37.4296, -122.1734")
+      #:additional-locations (list
+        (make-location #:address "20807 Stevens Creek Blvd # 200, Cupertino, CA 95014" 
+                       #:latlon "37.3231, -122.0383"
+                       #:show #f))
+    ]])
+  (list
   @text{
     @link-cafe[@make-cafe[
       #:name "Cafe Venetia"
@@ -41,13 +53,14 @@
                                 #:latlon "37.4383, -122.1595")
     ]],
     originally from Berkeley, has great bagels which @a[href: "https://www.nytimes.com/2021/03/08/dining/best-bagels.html"]{rival New York's}. Within Stanford, 
+    @link-cafe[voyager] is in the new CoDa building and near Gates Hall.
     @link-cafe[@make-cafe[
       #:name "Coupa Cafe"
       #:url "https://www.coupacafe.com/locations/"
       #:location (make-location #:address "473 Via Ortega Stanford, CA 94305" 
                                 #:latlon "37.4283, -122.1754")
     ]],
-    is close to Gates Hall (among other locations both within Stanford and in the broader Bay Area) and decent.
+    is also close to Gates Hall (among other locations both within Stanford and in the broader Bay Area) and decent.
   }
 
   @text{
@@ -93,13 +106,7 @@
                                 #:latlon "37.4164, -122.0976")
     ]], 
     a bakery that supplies many Bay Area cafes with great pastries, used to have coffee before the city shut it down, and now (I think) hosts a rotating set of coffee pop-ups (contact me if you know more). 
-    @link-cafe[@make-cafe[
-      #:name "Voyager"
-      #:url "https://www.voyagercraftcoffeeorders.com"
-      #:location (make-location #:address "20807 Stevens Creek Blvd # 200, Cupertino, CA 95014" 
-                                #:latlon "37.3231, -122.0383"
-                                #:show #f)
-    ]]
+    @link-cafe[voyager]
     is a good (though often crowded) option in Cupertino, with a few other South Bay locations as well.
   }
 
@@ -112,4 +119,4 @@
                                 #:show #f)
     ]]
     is a decent option in Fremont.
-  }))
+  })))
