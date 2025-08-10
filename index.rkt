@@ -7,14 +7,16 @@
   @link[rel:"stylesheet" href:"main.css"]
 ))
 
-@(define me @b{Akshay Narayan})
-@(define (award t) @font[color: "#6c71c4" t])
-
+;@(define me @b{Akshay Narayan})
 @(define (service-list services) @ul{
    @(for/list ([service services]) @li{@a[href: (car service) (cdr service)]})
 })
 
 @(define (site-publication pub)
+  @(define (handle-link x)
+    (if (pair? x)
+        (list "[" @a[href: (car x) (cdr x)] "]")
+        x))
   @p{
     @(string-append "\"" (publication-title pub) "\"")
     @(if (empty? (publication-authors pub))
@@ -25,9 +27,21 @@
          }
     )
     @br
-    @i{@(publication-venue pub)} @(publication-year pub) @(publication-note pub)
+    @i{@(publication-venue pub)} @(publication-year pub)
     @br
-    @(for/list ([link (publication-links pub)]) (list "[" @a[href: (car link) (cdr link)] "]"))
+    @(if (eq? (publication-award pub) '())
+         '()
+         (list (font color: "#6c71c4" (handle-link (publication-award pub))) (br)))
+    @(for/list ([link (publication-links pub)]) (handle-link link))
+    @(if (eq? (publication-key pub) "none") 
+         '() 
+         @label{
+           @input[type: "checkbox" class: "bibtex-sel"]
+           @span[style: "cursor:pointer; text-decoration:underline;"]{[BibTex ✎]}
+           @span[class: "bibtex-body"]{
+           @br
+           @(bibtex pub)
+           }})
   })
 
 @doctype{html}
@@ -98,7 +112,7 @@
 
   @div[style: "text-align:left;"]{
     @h2{Publications}
-    @(for/list ([p (publications me award)]) (site-publication p))
+    @(for/list ([p (publications)]) (site-publication p))
   }
   
   @div[style: "text-align:left;"]{
@@ -124,18 +138,16 @@
     
     @site-publication[@make-publication[
       #:title "Preview: Networking" 
-      #:venue "OSDI/ATC"
+      #:venue "OSDI/ATC Topic Preview Session"
       #:year 2021
-      #:note "Topic Preview Session"
       #:links (list (cons "./res/osdi21_slides_narayan.pdf" "Slides PDF")
                     (cons "https://www.usenix.org/conference/osdi21/presentation/preview-networking" "Video"))
     ]]
 
     @site-publication[@make-publication[
       #:title "Modern Network Hardware"
-      #:venue "NSDI"
+      #:venue "NSDI Topic Preview Session"
       #:year 2019 
-      #:note "Topic Preview Session"
       #:links (list (cons "./res/nsdi19-modernnetworkhardware-topicpreview.pdf" "Slides PDF")
                     (cons "https://www.usenix.org/conference/nsdi19/presentation/preview" "Video"))
     ]]
