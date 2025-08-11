@@ -1,13 +1,15 @@
 #lang scribble/html
 
-@require["publications.rkt"] 
+@require[
+  "publications.rkt"
+  "service.rkt"
+] 
   
 @(define (style) (list  
   @link[rel:"stylesheet" href:"https://fonts.googleapis.com/css2?family=Recursive:slnt,CASL,MONO@-1,0.75,0.25&display=swap"]
   @link[rel:"stylesheet" href:"main.css"]
 ))
 
-;@(define me @b{Akshay Narayan})
 @(define (service-list services) @ul{
    @(for/list ([service services]) @li{@a[href: (car service) (cdr service)]})
 })
@@ -19,11 +21,13 @@
         x))
   @p{
     @(string-append "\"" (publication-title pub) "\"")
-    @(if (empty? (publication-authors pub))
+    @(if (empty? (publication-authors-str pub))
          ""
          @text{
            @br
-           @(drop-right (flatten (map (lambda (i) (list i ", ")) (publication-authors pub))) 1)
+           @(drop-right (flatten (map (lambda (i) (list i ", ")) 
+                                      (map (lambda (a) (if (eq? a 'me) @b{Akshay Narayan} a)) 
+                                           (publication-authors pub)))) 1)
          }
     )
     @br
@@ -101,6 +105,10 @@
   @div[style: "text-align:left;"]{
     @h2{Teaching}
     @p{
+      Fall 2025: 
+      @a[href: "https://cs.brown.edu/courses/csci1675/spring2025/"]{CSCI 1675: Designing High-Performance Network Systems}
+    }
+    @p{
       Spring 2025: 
       @a[href: "https://cs.brown.edu/courses/csci1675/spring2025/"]{CSCI 1675: Designing High-Performance Network Systems}
     }
@@ -117,20 +125,18 @@
   
   @div[style: "text-align:left;"]{
     @h2{Service}
-    @(service-list (list 
-      (cons "https://www.usenix.org/conference/nsdi26" "NSDI 2026 TPC")
-      (cons "https://conferences.sigcomm.org/sigcomm/2025/workshop/ebpf/" "2025 SIGCOMM eBPF Workshop TPC")
-      (cons "https://conferences.sigcomm.org/sigcomm/2025/tpc/" "SIGCOMM 2025 TPC")
-      (cons "https://conferences.sigcomm.org/co-next/2025/#!/pc" "CoNEXT 2025 TPC")
-      (cons "https://sysdw24.github.io/" "SysDW 2024 TPC")
-      (cons "https://conferences.sigcomm.org/hotnets/2024/program-committee/" "HotNets 2024 TPC")
-      (cons "https://www.irtf.org/anrw/2024/committees.html" "ANRW 2024 TPC")
-      (cons "https://conferences.sigcomm.org/events/apnet2024/pc.php" "APNet 2024 TPC")
-      (cons "https://www.sigcomm.org/publications/computer-communication-review/" "SIGCOMM CCR 2024")
-      (cons "https://www.usenix.org/conference/nsdi24/call-for-papers" "NSDI 2024 TPC")
-      (cons "https://irtf.org/anrw/2023/" "ANRW 2023 TPC")
-      (cons "https://conferences.sigcomm.org/sigcomm/2021/cf-artifacts.html" "SIGCOMM 2021 Artifact Evaluation")
-    ))
+    @(for/list ([service-types (group-services (services))]) 
+      @text{
+        @(h3 (service-type ((compose car car) service-types)))
+        @ul{@(for/list ([service-venues service-types]) 
+            @li{@(service-venue (car service-venues)): 
+              @(drop-right (flatten 
+                (map (lambda (i) (list i ", ")) 
+                  (map (lambda (s) @a[href: (service-url s)]{@((compose number->string service-year) s)}) 
+                    service-venues))) 1)
+            })
+        }
+      })
   }
 
   @div[style: "text-align:left;"]{
