@@ -40,7 +40,7 @@
   #:award [award '()]
   #:key [key '()]
   #:links links)
-  (publication 
+  (publication
     title 
     authors 
     venue 
