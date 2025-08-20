@@ -1,8 +1,8 @@
 #lang scribble/html
 
 @require[
-  "publications.rkt"
-  "service.rkt"
+  (except-in "publications.rkt" doc)
+  (except-in "service.rkt" doc)
 ] 
   
 @(define (style) (list  
@@ -13,6 +13,18 @@
 @(define (service-list services) @ul{
    @(for/list ([service services]) @li{@a[href: (car service) (cdr service)]})
 })
+
+@(define (bibtex publication)
+  @text{
+    @"@"inproceedings{@(publication-key publication),
+      title = {{ @(publication-title publication) }},
+      author = { @(string-join (publication-authors-str publication) " and ") },
+      year = { @(publication-year publication) },
+      booktitle = { @(publication-venue publication) },
+      doi = { @(publication-doi publication) },
+    }
+  }
+)
 
 @(define (site-publication pub)
   @(define (handle-link x)

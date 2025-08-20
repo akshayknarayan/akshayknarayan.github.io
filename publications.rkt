@@ -1,4 +1,6 @@
-#lang scribble/html
+#lang scribble/base
+
+@require[racket/list racket/string]
 
 @provide[
   publications 
@@ -9,23 +11,11 @@
   publication-authors-str
   publication-venue
   publication-year
+  publication-doi
   publication-award
   publication-links
   publication-key
-  bibtex
 ]
-
-@(define (bibtex publication)
-  @text{
-    @"@"inproceedings{@(publication-key publication),
-      title = {{ @(publication-title publication) }},
-      author = { @(string-join (publication-authors-str publication) " and ") },
-      year = { @(publication-year publication) },
-      booktitle = { @(publication-venue publication) },
-      doi = { @(publication-doi publication) },
-    }
-  }
-)
 
 @(struct publication (title authors venue year doi award key links) #:transparent)
 @(define (publication-authors-str publication)

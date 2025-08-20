@@ -1,4 +1,6 @@
-#lang scribble/html
+#lang scribble/base
+
+@require[racket/list]
 
 @provide[
   services
