@@ -1,16 +1,18 @@
-#lang scribble/report
+#lang scribble/base
 
 @require[
   racket/list
+  racket/string
   scribble/base 
   scribble/core 
   scribble/latex-properties
   (except-in "publications.rkt" doc)
   (except-in "students.rkt" doc)
-@;  "service.rkt"
+  (except-in "service.rkt" doc)
 ]
 
-@title[#:style (make-style #f (list (make-tex-addition "cv/prefix.tex")))]{CV}
+@title[#:style (make-style #f (list (make-tex-addition "cv/prefix.tex")))
+       #:date ""]{Akshay Narayan}
 
 @(define (exact . items)
   (make-element (make-style "identity" '(exact-chars)) items))
@@ -57,17 +59,21 @@ Author order lists graduate students and post-docs first (ordered by contributio
 @(exact "\\section{Advising}")
 
 @(define (list-students ss) (list
-@(exact "\\begin{itemize}[leftmargin=1.5cm]\\setlength{\\itemsep}{0pt}")
-@(for/list ([s ss]) (list
-  @(exact "\\item")
-  @(exact "\\begin{tabular*}{0.9\\textwidth}{@{}l@{\\extracolsep{\\fill}}r@{}}")
-  @(student-name s)
-  @(exact "&") 
-  @(student-start-time s) @(exact " --- ") (if (empty? (student-end-time s)) "" (student-end-time s))
-  @(exact "\\\\\\end{tabular*}") 
-  ))
-@(exact "\\end{itemize}")
-))
+  @(exact "\\begin{itemize}[leftmargin=1.5cm]\\setlength{\\itemsep}{0pt}")
+  @(for/list ([s ss]) (list
+    (exact "\\item")
+    (exact "\\begin{tabular*}{\\dimexpr \\textwidth -1.5cm}[t]{@{}l@{\\extracolsep{\\fill}}r@{}}")
+    (student-name s)
+    (if (empty? (student-postgrad-affiliation s)) '() (exact (format " $\\rightarrow$ ~a" (student-postgrad-affiliation s))))
+    (exact "& ")
+    (emph (student-start-time s)) @(exact " --- ") (if (empty? (student-end-time s)) "" (emph (student-end-time s)))
+    (exact "\\\\")
+    (if (empty? (student-note s)) '() 
+        (exact (format "~a & \\\\" (student-note s))))
+    (if (empty? (student-thesis s)) '() 
+        (exact (format "Thesis: \\href{~a}{~a} & \\\\" (car (student-thesis s)) (cdr (student-thesis s)))))
+    (exact "\\end{tabular*}")))
+  @(exact "\\end{itemize}")))
 
 @(exact "\\noindent\\hspace{1cm}")
 @bf{M.Sc. research advisor}, Brown University:
@@ -89,3 +95,37 @@ Author order lists graduate students and post-docs first (ordered by contributio
 
 @(exact "\\noindent\\hspace{1cm}")
 @bf{Research advisor}, Massachusetts Institute of Technology:
+@(define mit-research 
+  (filter (lambda (s) (and 
+    (equal? (student-advising-affiliation s) "Massachusetts Institute of Technology")
+    (equal? (student-type s) "Research advisor")))
+  (students)))
+@(list-students mit-research)
+
+@(exact "\\section{Professional Service}")
+
+@(exact "
+\\smallskip
+\\begin{adjustwidth}{1cm}{}
+{\\footnotesize
+Conferences are the primary publication venue in Computer Science. Service to the profession centers on conference program committee memberships.
+}
+\\end{adjustwidth}
+")
+
+@(for/list ([service-types (group-services (services))]) (list
+  (exact "\\noindent\\hspace{1cm}") (bf (service-type ((compose car car) service-types)))
+  (exact "\\begin{itemize}[leftmargin=1.5cm]\\setlength{\\itemsep}{0pt}")
+  (for/list ([service-venues service-types]) (list 
+    (exact "\\item ")
+    (service-venue (car service-venues))
+    (exact ": ")
+    (drop-right (flatten 
+      (map (lambda (i) (list i ", "))
+      (map (lambda (s)
+        (exact (format "\\href{~a}{~a}"
+                       (string-replace (service-url s) "#" "\\#")
+                       ((compose number->string service-year) s)))
+      ) service-venues))) 1)
+  ))
+  (exact "\\end{itemize}")))

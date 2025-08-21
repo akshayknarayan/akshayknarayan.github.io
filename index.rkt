@@ -10,10 +10,6 @@
   @link[rel:"stylesheet" href:"main.css"]
 ))
 
-@(define (service-list services) @ul{
-   @(for/list ([service services]) @li{@a[href: (car service) (cdr service)]})
-})
-
 @(define (bibtex publication)
   @text{
     @"@"inproceedings{@(publication-key publication),

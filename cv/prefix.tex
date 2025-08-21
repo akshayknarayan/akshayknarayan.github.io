@@ -3,8 +3,6 @@
 %\usepackage[type1=true]{libertine}
 \titleformat{\section}{\Large\scshape}{}{0em}{}[\titlerule]
 \titleformat{\subsection}{\bf}{}{0em}{}[]
-%\usepackage[hyphens,spaces,obeyspaces]{url}
-%\usepackage[colorlinks=true,citecolor=magenta]{hyperref}
 %\PassOptionsToPackage{hyphens}{url}
 \hypersetup{
   colorlinks=true,
@@ -15,3 +13,6 @@
 \usepackage{changepage}
 
 \newcommand{\identity}[1]{#1}
+
+%\usepackage[hyphens,spaces,obeyspaces]{url}
+\renewcommand{\packageHyperref}{\usepackage[colorlinks=true,citecolor=magenta]{hyperref}}

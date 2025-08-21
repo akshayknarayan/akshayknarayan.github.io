@@ -57,32 +57,19 @@
     #:start-time "September 2025"
     #:advising-affiliation @brown
   ]
-
-  @make-student[
-    #:name "Mengistie Hailemariam"
-    #:type @ugrad
-    #:start-time "November 2024"
-    #:advising-affiliation @brown
-  ]
-
+  
   @make-student[
     #:name "Bhavani Venkatesan"
     #:type @ugrad
     #:start-time "May 2025"
     #:advising-affiliation @brown
   ]
-
+  
   @make-student[
-    #:name "Megan Zheng"
-    #:type @ugrad
-    #:start-time "January 2025"
-    #:advising-affiliation @brown
-  ]
-
-  @make-student[
-    #:name "Ziyun \"Alice\" Song"
-    #:type @masters
-    #:start-time "October 2024"
+    #:name "Xinyu \"Kevin\" Dong"
+    #:type @research
+    #:start-time "May 2025"
+    #:note "M.Sc. student at U. Penn."
     #:advising-affiliation @brown
   ]
 
@@ -92,12 +79,25 @@
     #:start-time "February 2025"
     #:advising-affiliation @brown
   ]
+
+  @make-student[
+    #:name "Ziyun \"Alice\" Song"
+    #:type @masters
+    #:start-time "October 2024"
+    #:advising-affiliation @brown
+  ]
   
   @make-student[
-    #:name "Xinyu \"Kevin\" Dong"
-    #:type @research
-    #:start-time "May 2025"
-    #:note "M.Sc. student at U. Penn."
+    #:name "Megan Zheng"
+    #:type @ugrad
+    #:start-time "January 2025"
+    #:advising-affiliation @brown
+  ]
+  
+  @make-student[
+    #:name "Mengistie Hailemariam"
+    #:type @ugrad
+    #:start-time "November 2024"
     #:advising-affiliation @brown
   ]
 
