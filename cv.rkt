@@ -45,7 +45,7 @@
 \\begin{adjustwidth}{1cm}{}
 {\\footnotesize
 Conferences are the primary publication venue in Computer Science.
-Author order lists graduate students and post-docs first (ordered by contribution), followed by faculty in no fixed order. Some publications list faculty authors in alphabetical order or order of contribution, others list the lead faculty author last.
+By convention, author order lists students and post-docs first (ordered by contribution), followed by faculty in no fixed order. Some publications list faculty authors in alphabetical order or order of contribution, others list the lead faculty author last.
 }
 \\end{adjustwidth}
 ")
@@ -103,6 +103,8 @@ Author order lists graduate students and post-docs first (ordered by contributio
 @(list-students mit-research)
 
 @(exact "\\section{Professional Service}")
+
+@(exact "\\input{cv/university-service.tex}")
 
 @(exact "
 \\smallskip
