@@ -112,17 +112,15 @@
   
   @div[style: "text-align:left;"]{
     @h2{Teaching}
-    @p{
-      Fall 2025: 
-      @a[href: "https://cs.brown.edu/courses/csci1675/fall2025/"]{CSCI 1675: Designing High-Performance Network Systems}
+    @h4{CSCI 1675: Designing High-Performance Network Systems}
+    @p[style: "padding-left: 10px"]{
+       @a[href:"https://cs.brown.edu/courses/csci1675/fall2025/"]{Fall 2025},
+       @a[href:"https://cs.brown.edu/courses/csci1675/spring2025/"]{Spring 2025}
     }
-    @p{
-      Spring 2025: 
-      @a[href: "https://cs.brown.edu/courses/csci1675/spring2025/"]{CSCI 1675: Designing High-Performance Network Systems}
-    }
-    @p{
-      Fall 2024: 
-      @a[href: "https://cs.brown.edu/courses/csci2680/fall2024/"]{CSCI 2680: Computer Networks and the Internet}
+    @h4{CSCI 2680: Computer Networks and the Internet}
+    @p[style: "padding-left: 10px"]{
+      @a[href: "https://cs.brown.edu/courses/csci2680/spring2026"]{Spring 2026},
+      @a[href: "https://cs.brown.edu/courses/csci2680/fall2024/"]{Fall 2024}
     }
   }
 
