@@ -30,6 +30,13 @@
 
 @(define (services) (list 
   @make-service[
+    #:venue "CoNEXT"
+    #:year 2026
+    #:type @tpc
+    #:url "https://conferences.sigcomm.org/co-next/2026/#!/pc"
+  ]
+
+  @make-service[
     #:venue "NSDI"
     #:year 2026
     #:type @tpc
