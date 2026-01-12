@@ -30,6 +30,20 @@
 
 @(define (services) (list 
   @make-service[
+    #:venue "APNet"
+    #:year 2026
+    #:type @tpc
+    #:url "https://conferences.sigcomm.org/events/apnet2026/pc.php"
+  ]
+
+  @make-service[
+    #:venue "SIGCOMM"
+    #:year 2026
+    #:type @tpc
+    #:url "https://conferences.sigcomm.org/sigcomm/2026/tpc/"
+  ]
+
+  @make-service[
     #:venue "CoNEXT"
     #:year 2026
     #:type @tpc
