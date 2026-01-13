@@ -6,7 +6,7 @@
 
 @(define (phl make-cafe)
   (list 
-    @text{@a[href: "https://ionathan.ch/2024/04/14/philly-coffee"]{List from a local expert.}}
+    @text{@a[href: "https://ionathan.ch/2024/04/14/philly-coffee.html"]{List from a local expert.}}
     @text{
       In "historic" Kennett Square (the mushroom capital of the world), 
       @link-cafe[@make-cafe[
