@@ -30,6 +30,13 @@
 
 @(define (services) (list 
   @make-service[
+    #:venue "EuroSys"
+    #:year 2027
+    #:type @tpc
+    #:url "https://2027.eurosys.org/"
+  ]
+
+  @make-service[
     #:venue "APNet"
     #:year 2026
     #:type @tpc
