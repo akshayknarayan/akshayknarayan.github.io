@@ -18,6 +18,10 @@
   ))
 )
 
-(define bibfile (open-output-file (vector-ref (current-command-line-arguments) 0) #:exists 'truncate))
-(display (for/list ([p (publications)]) (bibtex p)) bibfile)
-(close-output-port bibfile)
+(if (> (vector-length (current-command-line-arguments)) 0)
+  (let ([bibfile (open-output-file (vector-ref (current-command-line-arguments) 0) #:exists 'truncate)])
+    (for ([p (publications)]) (display (bibtex p) bibfile))
+    (close-output-port bibfile)
+    )
+  (for ([p (publications)]) (display (bibtex p)))
+  )

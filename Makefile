@@ -1,4 +1,4 @@
-all: index.html coffee.html res/akshay-narayan-cv.pdf
+all: index.html coffee.html res/akshay-narayan-cv.pdf res/akshay.bib
 
 coffee.html: coffee/*.rkt main.css map.css
 	racket coffee/index.rkt > $@ || rm $@
@@ -6,7 +6,7 @@ coffee.html: coffee/*.rkt main.css map.css
 index.html: index.rkt publications.rkt service.rkt main.css
 	racket $< > $@ || rm $@
 
-akshay.bib: bib.rkt publications.rkt
+res/akshay.bib: bib.rkt publications.rkt
 	racket $< $@
 
 cv.tex: cv.rkt cv/*.tex publications.rkt service.rkt students.rkt
