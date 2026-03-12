@@ -30,6 +30,13 @@
 
 @(define (services) (list 
   @make-service[
+    #:venue "eBPF"
+    #:year 2026
+    #:type @tpc
+    #:url "https://ebpf.github.io/2026/cfp.html"
+  ]
+
+  @make-service[
     #:venue "EuroSys"
     #:year 2027
     #:type @tpc
