@@ -64,6 +64,7 @@
       #:venue "HotNets"
       #:year 2024
       #:doi "10.1145/3696348.3696865"
+      #:key "archie-hotnets"
       #:links (list (cons "./res/archie.pdf" "Paper")
                     (cons "https://conferences.sigcomm.org/hotnets/2024/program.html" "Conference Program"))
     ]

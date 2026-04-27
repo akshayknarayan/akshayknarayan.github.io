@@ -12,7 +12,13 @@ res/akshay.bib: bib.rkt publications.rkt
 cv.tex: cv.rkt cv/*.tex publications.rkt service.rkt students.rkt
 	raco scribble --latex $<
 
+cv-1page.tex: cv-1page.rkt cv/*.tex publications.rkt
+	raco scribble --latex $<
+
 cv.pdf: cv.tex
+	tectonic $<
+
+cv-1page.pdf: cv-1page.tex
 	tectonic $<
 
 res/akshay-narayan-cv.pdf: cv.pdf
