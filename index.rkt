@@ -114,6 +114,7 @@
     @h2{Teaching}
     @h4{CSCI 1675: Designing High-Performance Network Systems}
     @p[style: "padding-left: 10px"]{
+       @a[href:"https://cs.brown.edu/courses/csci1675/fall2026/"]{Fall 2026},
        @a[href:"https://cs.brown.edu/courses/csci1675/fall2025/"]{Fall 2025},
        @a[href:"https://cs.brown.edu/courses/csci1675/spring2025/"]{Spring 2025}
     }
