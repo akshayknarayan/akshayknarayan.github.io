@@ -30,6 +30,13 @@
 
 @(define (services) (list 
   @make-service[
+    #:venue "NINeS"
+    #:year 2027
+    #:type @tpc
+    #:url "https://nines-conference.org/cfp"
+  ]
+
+  @make-service[
     #:venue "eBPF"
     #:year 2026
     #:type @tpc
