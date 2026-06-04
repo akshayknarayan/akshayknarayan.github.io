@@ -43,10 +43,10 @@
 
   @text{
     @link-cafe[@make-cafe[
-      #:name "Small Point Cafe"
-      #:url "http://smallpointcafe.com/"
-      #:location (make-location #:address "230 Westminster Street Providence, RI 02903" 
-                                #:latlon "41.8230, -71.4125")
+      #:name "Ellie's"
+      #:url "https://elliesprov.com/"
+      #:location (make-location #:address "250 Westminster St, Providence, RI 02903"
+                                #:latlon "41.8227, -71.4127")
     ]] 
     is a good option downtown. There are also two other Bolt locations in downtown Providence.
   }
