@@ -41,18 +41,28 @@
 @(define mit "Massachusetts Institute of Technology")
 @(define ugrad "Undergraduate")
 @(define masters "M.Sc.")
+@(define phd "Ph.D.")
 @(define research "Research advisor")
 
 @(define (students) (list
   @make-student[
-    #:name "Hailey Hsiung"
-    #:type @ugrad
-    #:start-time "September 2025"
+    #:name "Franco Solleza"
+    #:type @phd
+    #:start-time "May 2025"
     #:advising-affiliation @brown
+    #:note "Co-Advised with Malte Schwarzkopf"
   ]
   
   @make-student[
-    #:name "Hee Su \"Julie\" Chung"
+    #:name "Oğuzhan Çölkesen"
+    #:type @phd
+    #:start-time "September 2025"
+    #:advising-affiliation @brown
+    #:note "Co-Advised with Nikos Vasilakis"
+  ]
+
+  @make-student[
+    #:name "Hailey Hsiung"
     #:type @ugrad
     #:start-time "September 2025"
     #:advising-affiliation @brown
@@ -66,31 +76,9 @@
   ]
   
   @make-student[
-    #:name "Xinyu \"Kevin\" Dong"
-    #:type @research
-    #:start-time "May 2025"
-    #:note "M.Sc. student at U. Penn."
-    #:advising-affiliation @brown
-  ]
-
-  @make-student[
     #:name "Edward Nguyen"
     #:type @ugrad
     #:start-time "February 2025"
-    #:advising-affiliation @brown
-  ]
-
-  @make-student[
-    #:name "Ziyun \"Alice\" Song"
-    #:type @masters
-    #:start-time "October 2024"
-    #:advising-affiliation @brown
-  ]
-  
-  @make-student[
-    #:name "Megan Zheng"
-    #:type @ugrad
-    #:start-time "January 2025"
     #:advising-affiliation @brown
   ]
   
@@ -99,6 +87,52 @@
     #:type @ugrad
     #:start-time "November 2024"
     #:advising-affiliation @brown
+  ]
+
+  @make-student[
+    #:name "Ziyun \"Alice\" Song"
+    #:type @masters
+    #:start-time "October 2024"
+    #:end-time "August 2026"
+    #:advising-affiliation @brown
+    #:postgrad-affiliation "UPenn (PhD)"
+  ]
+  
+  @make-student[
+    #:name "Hee Su \"Julie\" Chung"
+    #:type @ugrad
+    #:start-time "September 2025"
+    #:end-time "May 2026"
+    #:advising-affiliation @brown
+    #:postgrad-affiliation "Google"
+  ]
+  
+  @make-student[
+    #:name "Roberto Gonzales Matos"
+    #:type @ugrad
+    #:start-time "September 2025"
+    #:end-time "May 2026"
+    #:advising-affiliation @brown
+    #:postgrad-affiliation "Adobe"
+  ]
+  
+  @make-student[
+    #:name "Megan Zheng"
+    #:type @ugrad
+    #:start-time "January 2025"
+    #:end-time "May 2026"
+    #:advising-affiliation @brown
+    #:postgrad-affiliation "Princeton (PhD)"
+  ]
+  
+  @make-student[
+    #:name "Xinyu \"Kevin\" Dong"
+    #:type @research
+    #:start-time "May 2025"
+    #:end-time "November 2025"
+    #:note "M.Sc. student at U. Penn."
+    #:advising-affiliation @brown
+    #:postgrad-affiliation "USC (PhD)"
   ]
 
   @make-student[
