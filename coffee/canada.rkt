@@ -23,8 +23,31 @@
         #:location (make-location #:address "360 Rue Saint-Jacques, Montréal, QC H2Y 1P5, Canada"
                                   #:latlon "45.5023, -73.5594")
       ]]
-      is a cafe located within an old bank building. It's also a coworking space.
+      is a cafe in Old Montréal located within an old bank building. It's also a coworking space.
     }
+
+    @text{
+      In the Plateau Mont-Royal, 
+      @link-cafe[@make-cafe[
+        #:name "Boulangerie le Toledo"
+        #:url "https://www.letoledo.com/"
+        #:location (make-location #:address "351 Avenue du Mont-Royal Est, Montreal, Québec H2T 1R1, Canada"
+                                  #:latlon "45.5236, -73.5835")
+      ]]
+      has great coffee and (as the name implies) pastries.
+    }
+
+    @text{
+      Near Beaudry metro station,
+      @link-cafe[@make-cafe[
+        #:name "Pourquoi Pas espresso bar"
+        #:url "https://maps.app.goo.gl/qMv44QK9DJhZXszW8"
+        #:location (make-location #:address "1447 R. Atateken, Montréal, QC H2L 3L2, Canada"
+                                  #:latlon "45.5179, -73.5576")
+      ]] 
+      is good.
+    }
+
 
     @text{
       @scouting-report-label In Quebec City, Deepti recommends 
