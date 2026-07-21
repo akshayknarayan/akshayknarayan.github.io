@@ -5,33 +5,33 @@
   racket/set
   "preamble.rkt"
   "util.rkt"
-  "pvd.rkt"
-  "bos.rkt"
-  "berkeley.rkt"
-  "sf.rkt"
-  "southbay.rkt"
-  "ny.rkt"
-  "seattle.rkt"
-  "anz.rkt"
-  "norcal.rkt"
-  "socal.rkt"
-  "nhv.rkt"
-  "hawaii.rkt"
-  "london.rkt"
   "ams.rkt"
-  "rhein-main.rkt"
+  "anz.rkt"
   "atl.rkt"
-  "italy.rkt"
-  "spain.rkt"
-  "france.rkt"
-  "chicago.rkt"
-  "pdx.rkt"
   "austin.rkt"
-  "philly.rkt"
-  "india.rkt"
-  "canada.rkt"
+  "berkeley.rkt"
+  "bos.rkt"
   "budapest.rkt"
+  "canada.rkt"
+  "chicago.rkt"
+  "france.rkt"
+  "hawaii.rkt"
+  "india.rkt"
+  "italy.rkt"
+  "london.rkt"
+  "nhv.rkt"
+  "norcal.rkt"
+  "ny.rkt"
+  "pdx.rkt"
+  "philly.rkt"
+  "pvd.rkt"
+  "rhein-main.rkt"
+  "seattle.rkt"
+  "sf.rkt"
   "slc.rkt"
+  "socal.rkt"
+  "southbay.rkt"
+  "spain.rkt"
   "zurich.rkt"
 ]
 
@@ -73,36 +73,13 @@
         #:abbrv "sea"
         #:mapzoom 11
         @seattle]
-  @city[#:name "Australia/New Zealand"
-        #:abbrv "anz"
-        @anz]
-  @city[#:name "NorCal (and Southern Oregon)"
-        #:abbrv "norcal"
-        #:mapzoom 7
-        @norcal]
-  @city[#:name "SoCal"
-        #:abbrv "socal"
-        #:mapzoom 9
-        @socal]
   @city[#:name "New Haven"
         #:abbrv "nhv"
         #:mapzoom 14
         @newhaven]
-  @city[#:name "Hawai'i"
-        #:abbrv "hawaii"
-        #:mapzoom 7
-        @hawaii]
-  @city[#:name "London"
-        #:abbrv "london"
-        @london]
-  @city[#:name "Italy"
-        #:abbrv "italy"
-        #:mapzoom 7
-        @italy]
-  @city[#:name "Paris"
-        #:abbrv "paris"
-        #:mapzoom 12
-        @paris]
+  @city[#:name "Montréal"
+        #:abbrv "montreal"
+        @montreal]
   @city[#:name "Barcelona"
         #:abbrv "bcn"
         #:mapzoom 13
@@ -115,17 +92,42 @@
         #:abbrv "andalusia"
         #:mapzoom 13
         @andalusia]
+  @city[#:name "London"
+        #:abbrv "london"
+        #:mapzoom 10
+        @london]
+  @city[#:name "Italy"
+        #:abbrv "italy"
+        #:mapzoom 7
+        @italy]
+  @city[#:name "Paris"
+        #:abbrv "paris"
+        #:mapzoom 12
+        @paris]
   @city[#:name "Amsterdam"
         #:abbrv "ams"
         @ams]
   @city[#:name "Germany Rhein-Main Area (incl. Frankfurt)"
         #:abbrv "fra"
         @rhein-main]
-  @city[#:name "Atlanta"
-        #:abbrv "atl"
-        @atl]
+  @city[#:name "NorCal (and Southern Oregon)"
+        #:abbrv "norcal"
+        #:mapzoom 7
+        @norcal]
+  @city[#:name "SoCal"
+        #:abbrv "socal"
+        #:mapzoom 9
+        @socal]
+  @city[#:name "Hawai'i"
+        #:abbrv "hawaii"
+        #:mapzoom 7
+        @hawaii]
+  @city[#:name "Australia/New Zealand"
+        #:abbrv "anz"
+        @anz]
   @city[#:name "Chicago"
         #:abbrv "chicago"
+        #:mapzoom 11
         @chicago]
   @city[#:name "Portland"
         #:abbrv "pdx"
@@ -136,13 +138,13 @@
   @city[#:name "Philadelphia"
         #:abbrv "phl"
         @phl]
+  @city[#:name "Atlanta"
+        #:abbrv "atl"
+        @atl]
   @city[#:name "India"
         #:abbrv "india"
         #:mapzoom 6
         @india]
-  @city[#:name "Montreal"
-        #:abbrv "montreal"
-        @montreal]
   @city[#:name "Toronto"
         #:abbrv "toronto"
         @toronto]
