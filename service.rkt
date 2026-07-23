@@ -35,6 +35,13 @@
     #:type @tpc
     #:url "https://nines-conference.org/cfp"
   ]
+  
+  @make-service[
+    #:venue "HotNets"
+    #:year 2026
+    #:type @tpc
+    #:url "https://conferences.sigcomm.org/hotnets/2026/committee.html"
+  ]
 
   @make-service[
     #:venue "eBPF"
