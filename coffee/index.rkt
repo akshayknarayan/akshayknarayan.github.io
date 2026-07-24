@@ -36,7 +36,7 @@
 ]
 
 @(define (style) (list  
-  @link[rel:"stylesheet" href:"https://fonts.googleapis.com/css2?family=Recursive:slnt,CASL,MONO@-1,0.75,0.25&display=swap"]
+  @link[rel:"stylesheet" href:"https://fonts.googleapis.com/css2?family=Recursive:CASL,MONO@0.75,0&display=swap"]
   @link[rel:"stylesheet" href:"main.css"]
   @link[rel:"stylesheet" href:"map.css"]
 ))
