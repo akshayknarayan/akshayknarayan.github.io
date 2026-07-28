@@ -1,0 +1,741 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PVD ↔ BOS Train Delay Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    color-scheme: light;
+    --surface-1:      #fcfcfb;
+    --page:           #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --baseline:       #c3c2b7;
+    --border:         rgba(11,11,11,0.10);
+    --good:           #006300;
+
+    --mbta:      #2a78d6;
+    --regional:  #eb6834;
+    --acela:     #1baf7a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --surface-1:      #1a1a19;
+      --page:           #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --gridline:       #2c2c2a;
+      --baseline:       #383835;
+      --border:         rgba(255,255,255,0.10);
+      --good:           #0ca30c;
+
+      --mbta:      #3987e5;
+      --regional:  #d95926;
+      --acela:     #199e70;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--page);
+    color: var(--text-primary);
+    line-height: 1.45;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 20px 64px; }
+  header h1 { font-size: 1.5rem; margin: 0 0 4px; }
+  header p { color: var(--text-secondary); margin: 0 0 4px; font-size: 0.92rem; }
+  header .meta { color: var(--text-muted); font-size: 0.82rem; }
+
+  section { margin-top: 40px; }
+  section > h2 { font-size: 1.15rem; margin: 0 0 4px; }
+  section > .section-sub { color: var(--text-secondary); font-size: 0.88rem; margin: 0 0 16px; max-width: 70ch; }
+
+  .card {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    overflow-x: auto;
+  }
+  .card h3 { font-size: 0.95rem; margin: 0 0 2px; }
+  .card .card-sub { color: var(--text-muted); font-size: 0.78rem; margin: 0 0 12px; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  .stat-tile { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .stat-tile .label { color: var(--text-secondary); font-size: 0.78rem; }
+  .stat-tile .value { font-size: 1.6rem; font-weight: 600; margin-top: 2px; }
+  .stat-tile .sub { color: var(--text-muted); font-size: 0.76rem; margin-top: 2px; }
+
+  .chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 760px) { .chart-row { grid-template-columns: 1fr; } }
+
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; margin: 6px 0 10px; font-size: 0.8rem; color: var(--text-secondary); }
+  .legend .item { display: inline-flex; align-items: center; gap: 6px; }
+  .legend .swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+  .legend .line { width: 14px; height: 2px; display: inline-block; border-radius: 1px; }
+
+  svg { display: block; overflow: visible; }
+  .axis-label { fill: var(--text-muted); font-size: 10px; }
+  .axis-line { stroke: var(--baseline); stroke-width: 1; }
+  .gridline { stroke: var(--gridline); stroke-width: 1; }
+  .mark-hit { cursor: pointer; }
+
+  table { border-collapse: collapse; width: 100%; font-size: 0.82rem; }
+  table caption { text-align: left; color: var(--text-muted); font-size: 0.76rem; margin-bottom: 6px; }
+  th, td { text-align: right; padding: 5px 10px; border-bottom: 1px solid var(--gridline); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; font-variant-numeric: normal; }
+  th { color: var(--text-secondary); font-weight: 600; font-size: 0.76rem; }
+
+  .toggle-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; font-size: 0.85rem; }
+  .toggle-row .toggle-label { color: var(--text-secondary); }
+  .segmented { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .segmented button {
+    font: inherit; font-size: 0.82rem; padding: 6px 14px; border: 0; cursor: pointer;
+    background: var(--surface-1); color: var(--text-secondary);
+  }
+  .segmented button.active { background: var(--mbta); color: #fff; }
+
+  .tooltip {
+    position: fixed; pointer-events: none; z-index: 10;
+    background: var(--text-primary); color: var(--surface-1);
+    font-size: 0.78rem; padding: 6px 10px; border-radius: 6px;
+    max-width: 240px; opacity: 0; transition: opacity 0.08s;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+  }
+  .tooltip .t-title { font-weight: 600; margin-bottom: 3px; }
+  .tooltip .t-row { display: flex; gap: 8px; justify-content: space-between; }
+  .tooltip .t-row .k { opacity: 0.75; }
+
+  footer { margin-top: 48px; color: var(--text-muted); font-size: 0.78rem; max-width: 70ch; }
+  footer p { margin: 0 0 10px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>PVD ↔ BOS Train Delay Dashboard</h1>
+    <p>MBTA Commuter Rail vs. Amtrak Northeast Regional &amp; Acela, Providence → Boston (northbound).</p>
+    <p class="meta" id="coverage-line"></p>
+  </header>
+
+  <section id="kpi-section">
+    <h2>At a glance</h2>
+    <div class="kpi-row" id="kpi-row"></div>
+  </section>
+
+  <section>
+    <h2>Delay characterization</h2>
+    <p class="section-sub">Arrival delay = predicted/actual arrival minus scheduled arrival, northbound only, using the most recent prediction available before each trip finished.</p>
+
+    <div class="card">
+      <h3>Delay along the corridor</h3>
+      <p class="card-sub">Median arrival delay at each stop, Providence → South Station</p>
+      <div id="chart-corridor"></div>
+    </div>
+
+    <div class="card">
+      <h3>Delay distribution at South Station</h3>
+      <p class="card-sub">p10 – median – p90, minutes late (negative = early)</p>
+      <div id="chart-distribution"></div>
+    </div>
+
+    <div class="chart-row">
+      <div class="card">
+        <h3>By time of day</h3>
+        <p class="card-sub">Median delay at South Station</p>
+        <div id="chart-timeofday"></div>
+      </div>
+      <div class="card">
+        <h3>Weekday vs. weekend</h3>
+        <p class="card-sub">Median delay at South Station</p>
+        <div id="chart-daytype"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Full breakdown</h3>
+      <div id="table-station"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Decision simulation: switch to MBTA, or stick with Amtrak?</h2>
+    <p class="section-sub">
+      For each historical northbound Amtrak trip, we look at what was knowable at a
+      decision point <em>M</em> minutes before its scheduled Providence departure (the
+      latest prediction available by then), then compare its actual arrival at
+      South Station against the next MBTA Commuter Rail train's actual arrival.
+      Positive "time saved" means switching to MBTA would have gotten you to
+      Boston sooner.
+    </p>
+
+    <div class="toggle-row">
+      <span class="toggle-label">Decision point:</span>
+      <div class="segmented" id="decision-toggle"></div>
+    </div>
+
+    <div class="kpi-row" id="decision-kpi-row"></div>
+
+    <div class="card">
+      <h3>Would switching have won, by how late Amtrak already looked?</h3>
+      <p class="card-sub">Share of cases where the next MBTA train reached Boston first</p>
+      <div id="chart-decision-bucket"></div>
+    </div>
+
+    <div class="card">
+      <h3>Every simulated case</h3>
+      <p class="card-sub">x: how late Amtrak looked at the decision point &middot; y: minutes saved by switching to MBTA (above the line = switching wins)</p>
+      <div id="chart-decision-scatter"></div>
+    </div>
+
+    <div class="card">
+      <h3>Full breakdown</h3>
+      <div id="table-decision"></div>
+    </div>
+  </section>
+
+  <footer>
+    <p><strong>Methodology notes.</strong> A trip's arrival is only counted once "settled": the poller kept polling that station at or after the scheduled/predicted time, so the last live prediction is treated as the actual. Trips still in progress as of the most recent poll are excluded rather than counted with an artificially small delay.</p>
+    <p>MBTA schedule-pattern trip IDs recur daily, so trips are re-keyed by (train id, service date) throughout — otherwise two different days' occurrences of the "same" trip id would collide.</p>
+    <p>Sample sizes are modest (a few weeks of data) and uneven across buckets — check the <em>n</em> column before trusting a percentage built on a handful of trips.</p>
+    <p>Generated by <code>python3 -m poller.dashboard</code>. Re-run any time to refresh against the latest <code>trains.db</code>.</p>
+  </footer>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script id="dashboard-data" type="application/json">{"generated_at": "2026-07-28T21:38:54.997476+00:00", "coverage": {"first_poll": "2026-07-08T16:03:13.989435+00:00", "last_poll": "2026-07-28T21:00:00.946339+00:00", "n_polls": 369, "n_days": 18}, "service_labels": {"mbta_cr": "MBTA Commuter Rail", "amtrak_regional": "Northeast Regional", "amtrak_acela": "Acela"}, "service_order": ["mbta_cr", "amtrak_regional", "amtrak_acela"], "station_order": ["Providence", "Route 128", "Back Bay", "South Station"], "delay": {"by_station": {"Providence": {"mbta_cr": {"n": 101, "mean": -0.3, "median": 0.0, "p10": -3.1, "p90": 1.8, "max": 11.0}, "amtrak_regional": {"n": 149, "mean": 20.5, "median": 10.0, "p10": 1.0, "p90": 53.0, "max": 157.0}, "amtrak_acela": {"n": 93, "mean": 20.6, "median": 12.0, "p10": -2.0, "p90": 44.0, "max": 164.0}}, "Route 128": {"mbta_cr": {"n": 253, "mean": 1.5, "median": 0.0, "p10": -1.6, "p90": 5.0, "max": 67.3}, "amtrak_regional": {"n": 111, "mean": 18.9, "median": 6.0, "p10": -3.0, "p90": 56.0, "max": 157.0}, "amtrak_acela": {"n": 71, "mean": 21.8, "median": 16.0, "p10": 0.0, "p90": 43.0, "max": 162.0}}, "Back Bay": {"mbta_cr": {"n": 279, "mean": -1.6, "median": -2.8, "p10": -6.2, "p90": 5.0, "max": 62.3}, "amtrak_regional": {"n": 88, "mean": 22.3, "median": 12.5, "p10": -5.0, "p90": 58.0, "max": 157.0}, "amtrak_acela": {"n": 67, "mean": 21.9, "median": 14.0, "p10": 0.0, "p90": 48.0, "max": 161.0}}, "South Station": {"mbta_cr": {"n": 279, "mean": -0.7, "median": -1.6, "p10": -5.0, "p90": 5.2, "max": 62.5}, "amtrak_regional": {"n": 47, "mean": 38.9, "median": 25.0, "p10": -5.0, "p90": 114.0, "max": 158.0}, "amtrak_acela": {"n": 56, "mean": 21.8, "median": 14.5, "p10": 0.0, "p90": 58.0, "max": 157.0}}}, "by_time_bucket": {"Early AM (12-6a)": {"mbta_cr": {"n": 32, "mean": 0.8, "median": -2.4, "p10": -5.0, "p90": 0.2, "max": 62.5}, "amtrak_regional": {"n": 1, "mean": 21.0, "median": 21.0, "p10": 21.0, "p90": 21.0, "max": 21.0}, "amtrak_acela": {"n": 2, "mean": 0.0, "median": 0.0, "p10": 0.0, "p90": 0.0, "max": 0.0}}, "AM peak (6-9a)": {"mbta_cr": {"n": 74, "mean": 0.4, "median": 0.0, "p10": -4.6, "p90": 6.0, "max": 11.5}, "amtrak_acela": {"n": 1, "mean": 8.0, "median": 8.0, "p10": 8.0, "p90": 8.0, "max": 8.0}}, "Midday (9a-3p)": {"mbta_cr": {"n": 102, "mean": -1.3, "median": -1.4, "p10": -4.8, "p90": 3.1, "max": 10.3}, "amtrak_acela": {"n": 29, "mean": 22.1, "median": 10.0, "p10": -1.0, "p90": 79.0, "max": 157.0}, "amtrak_regional": {"n": 6, "mean": 76.0, "median": 54.0, "p10": 22.0, "p90": 158.0, "max": 158.0}}, "PM peak (3-7p)": {"mbta_cr": {"n": 41, "mean": -1.4, "median": -2.5, "p10": -6.4, "p90": 3.0, "max": 15.3}, "amtrak_regional": {"n": 18, "mean": 38.1, "median": 16.5, "p10": 0.0, "p90": 135.0, "max": 144.0}}, "Evening (7p-12a)": {"mbta_cr": {"n": 30, "mean": -2.0, "median": -3.1, "p10": -4.8, "p90": 4.0, "max": 5.2}, "amtrak_acela": {"n": 24, "mean": 23.8, "median": 19.5, "p10": 5.0, "p90": 48.0, "max": 68.0}, "amtrak_regional": {"n": 22, "mean": 30.2, "median": 29.5, "p10": -10.0, "p90": 57.0, "max": 98.0}}}, "by_daytype": {"Weekday": {"mbta_cr": {"n": 243, "mean": -0.9, "median": -1.8, "p10": -5.2, "p90": 5.2, "max": 62.5}, "amtrak_regional": {"n": 35, "mean": 33.7, "median": 20.0, "p10": 0.0, "p90": 98.0, "max": 135.0}, "amtrak_acela": {"n": 44, "mean": 17.2, "median": 11.0, "p10": 0.0, "p90": 45.0, "max": 79.0}}, "Weekend": {"mbta_cr": {"n": 36, "mean": 0.5, "median": 0.0, "p10": -3.9, "p90": 5.2, "max": 15.3}, "amtrak_regional": {"n": 12, "mean": 54.1, "median": 50.0, "p10": -10.0, "p90": 144.0, "max": 158.0}, "amtrak_acela": {"n": 12, "mean": 38.6, "median": 19.0, "p10": 3.0, "p90": 126.0, "max": 157.0}}}}, "decision": {"15": {"cases": [{"route_type": "Regional", "known_delay": 13.0, "savings": 1.4, "wait": 10.0, "bucket": "5-15m late", "date": "2026-07-13", "train_id": "86-13"}, {"route_type": "Regional", "known_delay": 0.0, "savings": -15.7, "wait": 10.0, "bucket": "On time (<5m late)", "date": "2026-07-14", "train_id": "86-14"}, {"route_type": "Acela", "known_delay": 16.0, "savings": -26.3, "wait": 30.0, "bucket": "15-30m late", "date": "2026-07-14", "train_id": "2150-14"}, {"route_type": "Acela", "known_delay": 2.0, "savings": -35.5, "wait": 23.0, "bucket": "On time (<5m late)", "date": "2026-07-14", "train_id": "2152-14"}, {"route_type": "Regional", "known_delay": 21.0, "savings": 2.4, "wait": 10.0, "bucket": "15-30m late", "date": "2026-07-15", "train_id": "86-15"}, {"route_type": "Regional", "known_delay": 7.0, "savings": -20.5, "wait": 10.0, "bucket": "5-15m late", "date": "2026-07-16", "train_id": "86-16"}, {"route_type": "Acela", "known_delay": -4.0, "savings": -42.8, "wait": 30.0, "bucket": "On time (<5m late)", "date": "2026-07-16", "train_id": "2150-16"}, {"route_type": "Regional", "known_delay": 0.0, "savings": -11.6, "wait": 10.0, "bucket": "On time (<5m late)", "date": "2026-07-17", "train_id": "86-17"}, {"route_type": "Acela", "known_delay": 6.0, "savings": -40.6, "wait": 30.0, "bucket": "5-15m late", "date": "2026-07-17", "train_id": "2150-17"}, {"route_type": "Regional", "known_delay": 12.0, "savings": 31.4, "wait": 10.0, "bucket": "5-15m late", "date": "2026-07-17", "train_id": "190-17"}, {"route_type": "Acela", "known_delay": -8.0, "savings": -45.9, "wait": 43.0, "bucket": "On time (<5m late)", "date": "2026-07-17", "train_id": "2190-17"}, {"route_type": "Acela", "known_delay": -2.0, "savings": -25.9, "wait": 23.0, "bucket": "On time (<5m late)", "date": "2026-07-17", "train_id": "2152-17"}, {"route_type": "Regional", "known_delay": 120.0, "savings": 120.6, "wait": 29.0, "bucket": "30m+ late", "date": "2026-07-18", "train_id": "162-18"}, {"route_type": "Acela", "known_delay": 122.0, "savings": 83.6, "wait": 60.0, "bucket": "30m+ late", "date": "2026-07-18", "train_id": "2252-18"}, {"route_type": "Regional", "known_delay": 92.0, "savings": 31.7, "wait": 25.0, "bucket": "30m+ late", "date": "2026-07-18", "train_id": "152-18"}, {"route_type": "Regional", "known_delay": 55.0, "savings": 19.3, "wait": 28.0, "bucket": "30m+ late", "date": "2026-07-18", "train_id": "82-18"}, {"route_type": "Acela", "known_delay": 14.0, "savings": -53.9, "wait": 56.0, "bucket": "5-15m late", "date": "2026-07-18", "train_id": "2258-18"}, {"route_type": "Regional", "known_delay": 39.0, "savings": -37.0, "wait": 69.0, "bucket": "30m+ late", "date": "2026-07-18", "train_id": "194-18"}, {"route_type": "Acela", "known_delay": 8.0, "savings": -67.5, "wait": 60.0, "bucket": "5-15m late", "date": "2026-07-19", "train_id": "2252-19"}, {"route_type": "Acela", "known_delay": 0.0, "savings": -64.4, "wait": 56.0, "bucket": "On time (<5m late)", "date": "2026-07-19", "train_id": "2258-19"}, {"route_type": "Regional", "known_delay": 31.0, "savings": 36.7, "wait": 6.0, "bucket": "30m+ late", "date": "2026-07-20", "train_id": "66-19"}, {"route_type": "Regional", "known_delay": 114.0, "savings": 119.8, "wait": 10.0, "bucket": "30m+ late", "date": "2026-07-20", "train_id": "86-20"}, {"route_type": "Acela", "known_delay": 6.0, "savings": -40.4, "wait": 30.0, "bucket": "5-15m late", "date": "2026-07-20", "train_id": "2150-20"}, {"route_type": "Acela", "known_delay": 14.0, "savings": -22.0, "wait": 23.0, "bucket": "5-15m late", "date": "2026-07-20", "train_id": "2152-20"}, {"route_type": "Regional", "known_delay": 18.0, "savings": 7.4, "wait": 10.0, "bucket": "15-30m late", "date": "2026-07-21", "train_id": "86-21"}, {"route_type": "Acela", "known_delay": 26.0, "savings": -14.5, "wait": 23.0, "bucket": "15-30m late", "date": "2026-07-21", "train_id": "2152-21"}, {"route_type": "Acela", "known_delay": 13.0, "savings": -13.2, "wait": 23.0, "bucket": "5-15m late", "date": "2026-07-21", "train_id": "2154-21"}, {"route_type": "Regional", "known_delay": 18.0, "savings": 95.6, "wait": 26.0, "bucket": "15-30m late", "date": "2026-07-21", "train_id": "174-21"}, {"route_type": "Acela", "known_delay": 17.0, "savings": 17.3, "wait": 14.0, "bucket": "15-30m late", "date": "2026-07-21", "train_id": "2158-21"}, {"route_type": "Regional", "known_delay": 5.0, "savings": -12.2, "wait": 10.0, "bucket": "5-15m late", "date": "2026-07-22", "train_id": "86-22"}, {"route_type": "Acela", "known_delay": 6.0, "savings": -31.2, "wait": 30.0, "bucket": "5-15m late", "date": "2026-07-22", "train_id": "2150-22"}, {"route_type": "Acela", "known_delay": 21.0, "savings": -23.9, "wait": 23.0, "bucket": "15-30m late", "date": "2026-07-22", "train_id": "2152-22"}, {"route_type": "Regional", "known_delay": 10.0, "savings": -0.6, "wait": 10.0, "bucket": "5-15m late", "date": "2026-07-23", "train_id": "86-23"}, {"route_type": "Acela", "known_delay": 24.0, "savings": -9.3, "wait": 30.0, "bucket": "15-30m late", "date": "2026-07-23", "train_id": "2150-23"}, {"route_type": "Acela", "known_delay": -2.0, "savings": -30.7, "wait": 23.0, "bucket": "On time (<5m late)", "date": "2026-07-23", "train_id": "2152-23"}, {"route_type": "Regional", "known_delay": 5.0, "savings": -19.2, "wait": 10.0, "bucket": "5-15m late", "date": "2026-07-24", "train_id": "86-24"}, {"route_type": "Acela", "known_delay": 8.0, "savings": -44.8, "wait": 30.0, "bucket": "5-15m late", "date": "2026-07-24", "train_id": "2150-24"}, {"route_type": "Acela", "known_delay": -2.0, "savings": -44.0, "wait": 23.0, "bucket": "On time (<5m late)", "date": "2026-07-24", "train_id": "2152-24"}, {"route_type": "Acela", "known_delay": 8.0, "savings": -30.6, "wait": 23.0, "bucket": "5-15m late", "date": "2026-07-24", "train_id": "2154-24"}, {"route_type": "Acela", "known_delay": 44.0, "savings": 28.8, "wait": 14.0, "bucket": "30m+ late", "date": "2026-07-24", "train_id": "2158-24"}, {"route_type": "Acela", "known_delay": 0.0, "savings": -62.1, "wait": 57.0, "bucket": "On time (<5m late)", "date": "2026-07-25", "train_id": "2250-25"}, {"route_type": "Regional", "known_delay": 21.0, "savings": -66.0, "wait": 74.0, "bucket": "15-30m late", "date": "2026-07-25", "train_id": "160-25"}, {"route_type": "Acela", "known_delay": 9.0, "savings": -74.0, "wait": 60.0, "bucket": "5-15m late", "date": "2026-07-25", "train_id": "2252-25"}, {"route_type": "Acela", "known_delay": 8.0, "savings": -44.4, "wait": 56.0, "bucket": "5-15m late", "date": "2026-07-25", "train_id": "2258-25"}, {"route_type": "Acela", "known_delay": 15.0, "savings": -56.5, "wait": 60.0, "bucket": "15-30m late", "date": "2026-07-26", "train_id": "2252-26"}, {"route_type": "Acela", "known_delay": 3.0, "savings": -67.7, "wait": 56.0, "bucket": "On time (<5m late)", "date": "2026-07-26", "train_id": "2258-26"}, {"route_type": "Acela", "known_delay": 60.0, "savings": 26.5, "wait": 24.0, "bucket": "30m+ late", "date": "2026-07-26", "train_id": "2260-26"}, {"route_type": "Regional", "known_delay": 16.0, "savings": -2.1, "wait": 10.0, "bucket": "15-30m late", "date": "2026-07-27", "train_id": "86-27"}, {"route_type": "Acela", "known_delay": 25.0, "savings": 19.5, "wait": 30.0, "bucket": "15-30m late", "date": "2026-07-27", "train_id": "2150-27"}, {"route_type": "Acela", "known_delay": 0.0, "savings": -31.0, "wait": 23.0, "bucket": "On time (<5m late)", "date": "2026-07-27", "train_id": "2152-27"}, {"route_type": "Acela", "known_delay": 3.0, "savings": -11.3, "wait": 23.0, "bucket": "On time (<5m late)", "date": "2026-07-27", "train_id": "2154-27"}, {"route_type": "Acela", "known_delay": 41.0, "savings": 26.3, "wait": 14.0, "bucket": "30m+ late", "date": "2026-07-27", "train_id": "2158-27"}, {"route_type": "Acela", "known_delay": 10.0, "savings": -21.2, "wait": 30.0, "bucket": "5-15m late", "date": "2026-07-28", "train_id": "2150-28"}, {"route_type": "Acela", "known_delay": 1.0, "savings": -31.7, "wait": 23.0, "bucket": "On time (<5m late)", "date": "2026-07-28", "train_id": "2152-28"}, {"route_type": "Regional", "known_delay": 0.0, "savings": 79.3, "wait": 39.0, "bucket": "On time (<5m late)", "date": "2026-07-28", "train_id": "172-28"}, {"route_type": "Acela", "known_delay": 16.0, "savings": -19.7, "wait": 23.0, "bucket": "15-30m late", "date": "2026-07-28", "train_id": "2154-28"}], "summary": {"overall": {"Regional": {"n": 20, "pct_mbta_wins": 55.0, "median_savings": 1.9, "median_wait": 10.0}, "Acela": {"n": 36, "pct_mbta_wins": 16.7, "median_savings": -30.9, "median_wait": 30.0}}, "by_bucket": {"Regional": {"On time (<5m late)": {"n": 3, "pct_mbta_wins": 33.3, "median_savings": -11.6, "median_wait": 10.0}, "5-15m late": {"n": 6, "pct_mbta_wins": 33.3, "median_savings": -6.4, "median_wait": 10.0}, "15-30m late": {"n": 5, "pct_mbta_wins": 60.0, "median_savings": 2.4, "median_wait": 10.0}, "30m+ late": {"n": 6, "pct_mbta_wins": 83.3, "median_savings": 34.2, "median_wait": 26.5}}, "Acela": {"On time (<5m late)": {"n": 12, "pct_mbta_wins": 0.0, "median_savings": -39.1, "median_wait": 23.0}, "5-15m late": {"n": 12, "pct_mbta_wins": 0.0, "median_savings": -40.5, "median_wait": 30.0}, "15-30m late": {"n": 8, "pct_mbta_wins": 25.0, "median_savings": -17.1, "median_wait": 26.5}, "30m+ late": {"n": 4, "pct_mbta_wins": 100.0, "median_savings": 27.6, "median_wait": 19.0}}}}}, "30": {"cases": [{"route_type": "Regional", "known_delay": 13.0, "savings": 1.4, "wait": 25.0, "bucket": "5-15m late", "date": "2026-07-13", "train_id": "86-13"}, {"route_type": "Regional", "known_delay": 0.0, "savings": -15.7, "wait": 25.0, "bucket": "On time (<5m late)", "date": "2026-07-14", "train_id": "86-14"}, {"route_type": "Acela", "known_delay": 16.0, "savings": -26.3, "wait": 45.0, "bucket": "15-30m late", "date": "2026-07-14", "train_id": "2150-14"}, {"route_type": "Acela", "known_delay": 2.0, "savings": -35.5, "wait": 38.0, "bucket": "On time (<5m late)", "date": "2026-07-14", "train_id": "2152-14"}, {"route_type": "Regional", "known_delay": 21.0, "savings": 2.4, "wait": 25.0, "bucket": "15-30m late", "date": "2026-07-15", "train_id": "86-15"}, {"route_type": "Regional", "known_delay": 7.0, "savings": -20.5, "wait": 25.0, "bucket": "5-15m late", "date": "2026-07-16", "train_id": "86-16"}, {"route_type": "Acela", "known_delay": -4.0, "savings": -42.8, "wait": 45.0, "bucket": "On time (<5m late)", "date": "2026-07-16", "train_id": "2150-16"}, {"route_type": "Regional", "known_delay": 0.0, "savings": -11.6, "wait": 25.0, "bucket": "On time (<5m late)", "date": "2026-07-17", "train_id": "86-17"}, {"route_type": "Acela", "known_delay": 6.0, "savings": -40.6, "wait": 45.0, "bucket": "5-15m late", "date": "2026-07-17", "train_id": "2150-17"}, {"route_type": "Regional", "known_delay": 0.0, "savings": 31.4, "wait": 25.0, "bucket": "On time (<5m late)", "date": "2026-07-17", "train_id": "190-17"}, {"route_type": "Acela", "known_delay": -8.0, "savings": -45.9, "wait": 58.0, "bucket": "On time (<5m late)", "date": "2026-07-17", "train_id": "2190-17"}, {"route_type": "Acela", "known_delay": -2.0, "savings": -25.9, "wait": 38.0, "bucket": "On time (<5m late)", "date": "2026-07-17", "train_id": "2152-17"}, {"route_type": "Regional", "known_delay": 120.0, "savings": 120.6, "wait": 44.0, "bucket": "30m+ late", "date": "2026-07-18", "train_id": "162-18"}, {"route_type": "Acela", "known_delay": 122.0, "savings": 83.6, "wait": 75.0, "bucket": "30m+ late", "date": "2026-07-18", "train_id": "2252-18"}, {"route_type": "Regional", "known_delay": 92.0, "savings": 31.7, "wait": 40.0, "bucket": "30m+ late", "date": "2026-07-18", "train_id": "152-18"}, {"route_type": "Regional", "known_delay": 55.0, "savings": 19.3, "wait": 43.0, "bucket": "30m+ late", "date": "2026-07-18", "train_id": "82-18"}, {"route_type": "Acela", "known_delay": 14.0, "savings": -53.9, "wait": 71.0, "bucket": "5-15m late", "date": "2026-07-18", "train_id": "2258-18"}, {"route_type": "Regional", "known_delay": 39.0, "savings": -37.0, "wait": 84.0, "bucket": "30m+ late", "date": "2026-07-18", "train_id": "194-18"}, {"route_type": "Acela", "known_delay": 8.0, "savings": -67.5, "wait": 75.0, "bucket": "5-15m late", "date": "2026-07-19", "train_id": "2252-19"}, {"route_type": "Acela", "known_delay": 0.0, "savings": -64.4, "wait": 71.0, "bucket": "On time (<5m late)", "date": "2026-07-19", "train_id": "2258-19"}, {"route_type": "Regional", "known_delay": 7.0, "savings": 36.7, "wait": 21.0, "bucket": "5-15m late", "date": "2026-07-20", "train_id": "66-19"}, {"route_type": "Regional", "known_delay": 114.0, "savings": 119.8, "wait": 25.0, "bucket": "30m+ late", "date": "2026-07-20", "train_id": "86-20"}, {"route_type": "Acela", "known_delay": 6.0, "savings": -40.4, "wait": 45.0, "bucket": "5-15m late", "date": "2026-07-20", "train_id": "2150-20"}, {"route_type": "Acela", "known_delay": 14.0, "savings": -22.0, "wait": 38.0, "bucket": "5-15m late", "date": "2026-07-20", "train_id": "2152-20"}, {"route_type": "Regional", "known_delay": 18.0, "savings": 7.4, "wait": 25.0, "bucket": "15-30m late", "date": "2026-07-21", "train_id": "86-21"}, {"route_type": "Acela", "known_delay": 26.0, "savings": -14.5, "wait": 38.0, "bucket": "15-30m late", "date": "2026-07-21", "train_id": "2152-21"}, {"route_type": "Acela", "known_delay": 13.0, "savings": -13.2, "wait": 38.0, "bucket": "5-15m late", "date": "2026-07-21", "train_id": "2154-21"}, {"route_type": "Regional", "known_delay": 18.0, "savings": 95.6, "wait": 41.0, "bucket": "15-30m late", "date": "2026-07-21", "train_id": "174-21"}, {"route_type": "Acela", "known_delay": 12.0, "savings": 17.3, "wait": 29.0, "bucket": "5-15m late", "date": "2026-07-21", "train_id": "2158-21"}, {"route_type": "Regional", "known_delay": 5.0, "savings": -12.2, "wait": 25.0, "bucket": "5-15m late", "date": "2026-07-22", "train_id": "86-22"}, {"route_type": "Acela", "known_delay": 6.0, "savings": -31.2, "wait": 45.0, "bucket": "5-15m late", "date": "2026-07-22", "train_id": "2150-22"}, {"route_type": "Acela", "known_delay": 21.0, "savings": -23.9, "wait": 38.0, "bucket": "15-30m late", "date": "2026-07-22", "train_id": "2152-22"}, {"route_type": "Regional", "known_delay": 10.0, "savings": -0.6, "wait": 25.0, "bucket": "5-15m late", "date": "2026-07-23", "train_id": "86-23"}, {"route_type": "Acela", "known_delay": 24.0, "savings": -9.3, "wait": 45.0, "bucket": "15-30m late", "date": "2026-07-23", "train_id": "2150-23"}, {"route_type": "Acela", "known_delay": -2.0, "savings": -30.7, "wait": 38.0, "bucket": "On time (<5m late)", "date": "2026-07-23", "train_id": "2152-23"}, {"route_type": "Regional", "known_delay": 5.0, "savings": -19.2, "wait": 25.0, "bucket": "5-15m late", "date": "2026-07-24", "train_id": "86-24"}, {"route_type": "Acela", "known_delay": 8.0, "savings": -44.8, "wait": 45.0, "bucket": "5-15m late", "date": "2026-07-24", "train_id": "2150-24"}, {"route_type": "Acela", "known_delay": -2.0, "savings": -44.0, "wait": 38.0, "bucket": "On time (<5m late)", "date": "2026-07-24", "train_id": "2152-24"}, {"route_type": "Acela", "known_delay": 8.0, "savings": -30.6, "wait": 38.0, "bucket": "5-15m late", "date": "2026-07-24", "train_id": "2154-24"}, {"route_type": "Acela", "known_delay": 36.0, "savings": 28.8, "wait": 29.0, "bucket": "30m+ late", "date": "2026-07-24", "train_id": "2158-24"}, {"route_type": "Acela", "known_delay": 0.0, "savings": -62.1, "wait": 72.0, "bucket": "On time (<5m late)", "date": "2026-07-25", "train_id": "2250-25"}, {"route_type": "Regional", "known_delay": 21.0, "savings": -66.0, "wait": 89.0, "bucket": "15-30m late", "date": "2026-07-25", "train_id": "160-25"}, {"route_type": "Acela", "known_delay": 9.0, "savings": -74.0, "wait": 75.0, "bucket": "5-15m late", "date": "2026-07-25", "train_id": "2252-25"}, {"route_type": "Acela", "known_delay": 8.0, "savings": -44.4, "wait": 71.0, "bucket": "5-15m late", "date": "2026-07-25", "train_id": "2258-25"}, {"route_type": "Acela", "known_delay": 15.0, "savings": -56.5, "wait": 75.0, "bucket": "15-30m late", "date": "2026-07-26", "train_id": "2252-26"}, {"route_type": "Acela", "known_delay": 3.0, "savings": -67.7, "wait": 71.0, "bucket": "On time (<5m late)", "date": "2026-07-26", "train_id": "2258-26"}, {"route_type": "Acela", "known_delay": 57.0, "savings": 26.5, "wait": 39.0, "bucket": "30m+ late", "date": "2026-07-26", "train_id": "2260-26"}, {"route_type": "Regional", "known_delay": 16.0, "savings": -2.1, "wait": 25.0, "bucket": "15-30m late", "date": "2026-07-27", "train_id": "86-27"}, {"route_type": "Acela", "known_delay": 25.0, "savings": 19.5, "wait": 45.0, "bucket": "15-30m late", "date": "2026-07-27", "train_id": "2150-27"}, {"route_type": "Acela", "known_delay": 0.0, "savings": -31.0, "wait": 38.0, "bucket": "On time (<5m late)", "date": "2026-07-27", "train_id": "2152-27"}, {"route_type": "Acela", "known_delay": 3.0, "savings": -11.3, "wait": 38.0, "bucket": "On time (<5m late)", "date": "2026-07-27", "train_id": "2154-27"}, {"route_type": "Acela", "known_delay": 28.0, "savings": 26.3, "wait": 29.0, "bucket": "15-30m late", "date": "2026-07-27", "train_id": "2158-27"}, {"route_type": "Acela", "known_delay": 10.0, "savings": -21.2, "wait": 45.0, "bucket": "5-15m late", "date": "2026-07-28", "train_id": "2150-28"}, {"route_type": "Acela", "known_delay": 1.0, "savings": -31.7, "wait": 38.0, "bucket": "On time (<5m late)", "date": "2026-07-28", "train_id": "2152-28"}, {"route_type": "Regional", "known_delay": 0.0, "savings": 121.6, "wait": 8.0, "bucket": "On time (<5m late)", "date": "2026-07-28", "train_id": "172-28"}, {"route_type": "Acela", "known_delay": 16.0, "savings": -19.7, "wait": 38.0, "bucket": "15-30m late", "date": "2026-07-28", "train_id": "2154-28"}], "summary": {"overall": {"Regional": {"n": 20, "pct_mbta_wins": 55.0, "median_savings": 1.9, "median_wait": 25.0}, "Acela": {"n": 36, "pct_mbta_wins": 16.7, "median_savings": -30.9, "median_wait": 45.0}}, "by_bucket": {"Regional": {"On time (<5m late)": {"n": 4, "pct_mbta_wins": 50.0, "median_savings": 9.9, "median_wait": 25.0}, "5-15m late": {"n": 6, "pct_mbta_wins": 33.3, "median_savings": -6.4, "median_wait": 25.0}, "15-30m late": {"n": 5, "pct_mbta_wins": 60.0, "median_savings": 2.4, "median_wait": 25.0}, "30m+ late": {"n": 5, "pct_mbta_wins": 80.0, "median_savings": 31.7, "median_wait": 43.0}}, "Acela": {"On time (<5m late)": {"n": 12, "pct_mbta_wins": 0.0, "median_savings": -39.1, "median_wait": 38.0}, "5-15m late": {"n": 13, "pct_mbta_wins": 7.7, "median_savings": -40.4, "median_wait": 45.0}, "15-30m late": {"n": 8, "pct_mbta_wins": 25.0, "median_savings": -17.1, "median_wait": 41.5}, "30m+ late": {"n": 3, "pct_mbta_wins": 100.0, "median_savings": 28.8, "median_wait": 39.0}}}}}}, "decision_points": [15, 30], "delay_buckets": ["On time (<5m late)", "5-15m late", "15-30m late", "30m+ late"]}</script>
+<script>
+const DATA = JSON.parse(document.getElementById('dashboard-data').textContent);
+
+const SERVICE_COLOR = { mbta_cr: 'var(--mbta)', amtrak_regional: 'var(--regional)', amtrak_acela: 'var(--acela)' };
+const SERVICE_COLOR_RESOLVED = {}; // filled after mount, since CSS vars need a computed context
+const ROUTE_COLOR = { Regional: 'var(--regional)', Acela: 'var(--acela)' };
+const MIN_N = 5; // buckets thinner than this are dropped from charts (still visible in tables)
+
+function resolveColor(v) {
+  if (!v.startsWith('var(')) return v;
+  const name = v.slice(4, -1);
+  return getComputedStyle(document.body).getPropertyValue(name).trim();
+}
+
+const NS = 'http://www.w3.org/2000/svg';
+function svgEl(tag, attrs) {
+  const el = document.createElementNS(NS, tag);
+  for (const k in attrs) el.setAttribute(k, attrs[k]);
+  return el;
+}
+function fmtMin(v) {
+  if (v === null || v === undefined) return '?';
+  const sign = v > 0 ? '+' : '';
+  return `${sign}${v.toFixed(1)}m`;
+}
+
+// Paul Heckbert's "nice numbers" -- round axis bounds/step to clean values
+// (0 / 10 / 20, never +11.3 / +2.1 / -7.2) instead of an arbitrary fraction of the range.
+function niceNumber(range, round) {
+  const exponent = Math.floor(Math.log10(range));
+  const fraction = range / Math.pow(10, exponent);
+  let niceFraction;
+  if (round) {
+    niceFraction = fraction < 1.5 ? 1 : fraction < 3 ? 2 : fraction < 7 ? 5 : 10;
+  } else {
+    niceFraction = fraction <= 1 ? 1 : fraction <= 2 ? 2 : fraction <= 5 ? 5 : 10;
+  }
+  return niceFraction * Math.pow(10, exponent);
+}
+function niceScale(min, max, maxTicks = 5) {
+  if (min === max) { min -= 1; max += 1; }
+  const range = niceNumber(max - min, false);
+  const step = niceNumber(range / (maxTicks - 1), true);
+  const niceMin = Math.floor(min / step) * step;
+  const niceMax = Math.ceil(max / step) * step;
+  const ticks = [];
+  for (let v = niceMin; v <= niceMax + step * 0.5; v += step) ticks.push(Math.round(v * 1e6) / 1e6);
+  return { min: niceMin, max: niceMax, step, ticks };
+}
+
+const tooltip = document.getElementById('tooltip');
+function showTooltip(evt, titleText, rows) {
+  tooltip.innerHTML = '';
+  const t = document.createElement('div');
+  t.className = 't-title';
+  t.textContent = titleText;
+  tooltip.appendChild(t);
+  rows.forEach(([k, v]) => {
+    const row = document.createElement('div');
+    row.className = 't-row';
+    const kEl = document.createElement('span'); kEl.className = 'k'; kEl.textContent = k;
+    const vEl = document.createElement('span'); vEl.textContent = v;
+    row.appendChild(kEl); row.appendChild(vEl);
+    tooltip.appendChild(row);
+  });
+  tooltip.style.opacity = '1';
+  moveTooltip(evt);
+}
+function moveTooltip(evt) {
+  const pad = 14;
+  let x = evt.clientX + pad, y = evt.clientY + pad;
+  if (x + 240 > window.innerWidth) x = evt.clientX - 240 - pad;
+  if (y + 80 > window.innerHeight) y = evt.clientY - 80 - pad;
+  tooltip.style.left = x + 'px';
+  tooltip.style.top = y + 'px';
+}
+function hideTooltip() { tooltip.style.opacity = '0'; }
+
+function legend(container, items) {
+  const row = document.createElement('div');
+  row.className = 'legend';
+  items.forEach(({ label, color, shape }) => {
+    const item = document.createElement('span');
+    item.className = 'item';
+    const sw = document.createElement('span');
+    sw.className = shape === 'line' ? 'line' : 'swatch';
+    sw.style.background = resolveColor(color);
+    const txt = document.createElement('span');
+    txt.textContent = label;
+    item.appendChild(sw); item.appendChild(txt);
+    row.appendChild(item);
+  });
+  container.appendChild(row);
+}
+
+// ---- grouped bar chart: categories on x, one bar per series per category ----
+function renderGroupedBar(container, { categories, series, yFormat, height = 220 }) {
+  // series: [{ key, label, color, values: {category: value|null} }]
+  legend(container, series.map(s => ({ label: s.label, color: s.color })));
+
+  const width = Math.max(container.clientWidth || 560, 320);
+  const padding = { top: 10, right: 16, bottom: 28, left: 46 };
+  const plotW = width - padding.left - padding.right;
+  const plotH = height - padding.top - padding.bottom;
+
+  let allVals = [];
+  series.forEach(s => categories.forEach(c => {
+    const v = s.values[c];
+    if (v !== null && v !== undefined) allVals.push(v);
+  }));
+  if (allVals.length === 0) { container.appendChild(document.createTextNode('No data.')); return; }
+  const rawMin = Math.min(0, ...allVals), rawMax = Math.max(0, ...allVals);
+  const scale = niceScale(rawMin, rawMax);
+  const yMin = scale.min, yMax = scale.max;
+  const y = v => padding.top + plotH * (1 - (v - yMin) / (yMax - yMin));
+  const y0 = y(0);
+
+  const svg = svgEl('svg', { width, height, viewBox: `0 0 ${width} ${height}` });
+
+  scale.ticks.forEach(v => {
+    const yy = y(v);
+    svg.appendChild(svgEl('line', { x1: padding.left, x2: width - padding.right, y1: yy, y2: yy, class: 'gridline' }));
+    const label = svgEl('text', { x: padding.left - 8, y: yy + 3, class: 'axis-label', 'text-anchor': 'end' });
+    label.textContent = yFormat(v);
+    svg.appendChild(label);
+  });
+  svg.appendChild(svgEl('line', { x1: padding.left, x2: width - padding.right, y1: y0, y2: y0, class: 'axis-line' }));
+
+  const groupW = plotW / categories.length;
+  const barGap = 2;
+  const barW = Math.min(24, (groupW - 16) / series.length - barGap);
+
+  categories.forEach((cat, ci) => {
+    const groupX = padding.left + ci * groupW;
+    const label = svgEl('text', {
+      x: groupX + groupW / 2, y: height - padding.bottom + 16,
+      class: 'axis-label', 'text-anchor': 'middle',
+    });
+    label.textContent = cat;
+    svg.appendChild(label);
+
+    const visibleSeries = series.filter(s => {
+      const v = s.values[cat];
+      return v !== null && v !== undefined;
+    });
+    const setW = visibleSeries.length * (barW + barGap) - barGap;
+    let bx = groupX + (groupW - setW) / 2;
+
+    visibleSeries.forEach(s => {
+      const v = s.values[cat];
+      const barY = Math.min(y(v), y0);
+      const barH = Math.max(1, Math.abs(y(v) - y0));
+      const rect = svgEl('rect', {
+        x: bx, y: barY, width: barW, height: barH,
+        rx: 3, fill: resolveColor(s.color), class: 'mark-hit',
+      });
+      rect.addEventListener('pointerenter', e => showTooltip(e, cat, [[s.label, yFormat(v)]]));
+      rect.addEventListener('pointermove', moveTooltip);
+      rect.addEventListener('pointerleave', hideTooltip);
+      svg.appendChild(rect);
+      bx += barW + barGap;
+    });
+  });
+
+  container.appendChild(svg);
+}
+
+// ---- line chart: categories on x (ordinal), one line per series ----
+function renderLineChart(container, { categories, series, yFormat, height = 220 }) {
+  legend(container, series.map(s => ({ label: s.label, color: s.color, shape: 'line' })));
+
+  const width = Math.max(container.clientWidth || 560, 320);
+  const padding = { top: 14, right: 20, bottom: 28, left: 46 };
+  const plotW = width - padding.left - padding.right;
+  const plotH = height - padding.top - padding.bottom;
+
+  let allVals = [];
+  series.forEach(s => categories.forEach(c => {
+    const v = s.values[c];
+    if (v !== null && v !== undefined) allVals.push(v);
+  }));
+  const rawMin = Math.min(0, ...allVals), rawMax = Math.max(0, ...allVals);
+  const scale = niceScale(rawMin, rawMax);
+  const yMin = scale.min, yMax = scale.max;
+  const y = v => padding.top + plotH * (1 - (v - yMin) / (yMax - yMin));
+  const x = i => padding.left + (categories.length === 1 ? plotW / 2 : plotW * (i / (categories.length - 1)));
+
+  const svg = svgEl('svg', { width, height, viewBox: `0 0 ${width} ${height}` });
+
+  scale.ticks.forEach(v => {
+    const yy = y(v);
+    svg.appendChild(svgEl('line', { x1: padding.left, x2: width - padding.right, y1: yy, y2: yy, class: 'gridline' }));
+    const label = svgEl('text', { x: padding.left - 8, y: yy + 3, class: 'axis-label', 'text-anchor': 'end' });
+    label.textContent = yFormat(v);
+    svg.appendChild(label);
+  });
+  const y0 = y(0);
+  svg.appendChild(svgEl('line', { x1: padding.left, x2: width - padding.right, y1: y0, y2: y0, class: 'axis-line' }));
+
+  categories.forEach((cat, i) => {
+    const label = svgEl('text', { x: x(i), y: height - padding.bottom + 16, class: 'axis-label', 'text-anchor': 'middle' });
+    label.textContent = cat;
+    svg.appendChild(label);
+  });
+
+  series.forEach(s => {
+    const pts = categories.map((c, i) => [i, s.values[c]]).filter(([, v]) => v !== null && v !== undefined);
+    if (pts.length === 0) return;
+    const d = pts.map(([i, v], k) => `${k === 0 ? 'M' : 'L'} ${x(i)} ${y(v)}`).join(' ');
+    svg.appendChild(svgEl('path', { d, fill: 'none', stroke: resolveColor(s.color), 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }));
+    pts.forEach(([i, v]) => {
+      const g = svgEl('circle', { cx: x(i), cy: y(v), r: 4, fill: resolveColor(s.color), stroke: 'var(--surface-1)', 'stroke-width': 2, class: 'mark-hit' });
+      g.setAttribute('stroke', resolveColor('var(--surface-1)'));
+      g.addEventListener('pointerenter', e => showTooltip(e, categories[i], [[s.label, yFormat(v)]]));
+      g.addEventListener('pointermove', moveTooltip);
+      g.addEventListener('pointerleave', hideTooltip);
+      svg.appendChild(g);
+    });
+  });
+
+  container.appendChild(svg);
+}
+
+// ---- range/dumbbell chart: one horizontal row per label, p10-p90 span + median dot ----
+function renderRangeChart(container, { rows, xFormat, height }) {
+  // rows: [{ label, p10, median, p90, color }]
+  const width = Math.max(container.clientWidth || 560, 320);
+  const rowH = 34;
+  height = height || rows.length * rowH + 40;
+  const padding = { top: 10, right: 40, bottom: 30, left: 130 };
+  const plotW = width - padding.left - padding.right;
+
+  let vals = [];
+  rows.forEach(r => vals.push(r.p10, r.median, r.p90));
+  const rawMin = Math.min(0, ...vals), rawMax = Math.max(0, ...vals);
+  const scale = niceScale(rawMin, rawMax, 6);
+  const xMin = scale.min, xMax = scale.max;
+  const x = v => padding.left + plotW * (v - xMin) / (xMax - xMin);
+
+  const svg = svgEl('svg', { width, height, viewBox: `0 0 ${width} ${height}` });
+
+  scale.ticks.forEach(v => {
+    const xx = x(v);
+    svg.appendChild(svgEl('line', { x1: xx, x2: xx, y1: padding.top, y2: height - padding.bottom, class: 'gridline' }));
+    const label = svgEl('text', { x: xx, y: height - padding.bottom + 16, class: 'axis-label', 'text-anchor': 'middle' });
+    label.textContent = xFormat(v);
+    svg.appendChild(label);
+  });
+  const x0 = x(0);
+  svg.appendChild(svgEl('line', { x1: x0, x2: x0, y1: padding.top, y2: height - padding.bottom, class: 'axis-line' }));
+
+  rows.forEach((r, i) => {
+    const cy = padding.top + i * rowH + rowH / 2;
+    const label = svgEl('text', { x: padding.left - 12, y: cy + 4, class: 'axis-label', 'text-anchor': 'end' });
+    label.textContent = r.label;
+    svg.appendChild(label);
+
+    const color = resolveColor(r.color);
+    svg.appendChild(svgEl('line', { x1: x(r.p10), x2: x(r.p90), y1: cy, y2: cy, stroke: color, 'stroke-width': 2, opacity: 0.55 }));
+    const dot = svgEl('circle', { cx: x(r.median), cy, r: 6, fill: color, class: 'mark-hit' });
+    dot.addEventListener('pointerenter', e => showTooltip(e, r.label, [
+      ['p10', xFormat(r.p10)], ['median', xFormat(r.median)], ['p90', xFormat(r.p90)], ['n', r.n],
+    ]));
+    dot.addEventListener('pointermove', moveTooltip);
+    dot.addEventListener('pointerleave', hideTooltip);
+    svg.appendChild(dot);
+  });
+
+  container.appendChild(svg);
+}
+
+// ---- scatter chart ----
+function renderScatter(container, { points, groups, xFormat, yFormat, height = 320 }) {
+  // points: [{x, y, group, title}], groups: [{key, label, color}]
+  legend(container, groups.map(g => ({ label: g.label, color: g.color })));
+
+  const width = Math.max(container.clientWidth || 560, 320);
+  const padding = { top: 14, right: 20, bottom: 34, left: 50 };
+  const plotW = width - padding.left - padding.right;
+  const plotH = height - padding.top - padding.bottom;
+
+  if (points.length === 0) { container.appendChild(document.createTextNode('No data.')); return; }
+  let xs = points.map(p => p.x), ys = points.map(p => p.y);
+  const xScale = niceScale(Math.min(0, ...xs), Math.max(0, ...xs), 6);
+  const yScale = niceScale(Math.min(0, ...ys), Math.max(0, ...ys), 6);
+  const xMin = xScale.min, xMax = xScale.max, yMin = yScale.min, yMax = yScale.max;
+  const x = v => padding.left + plotW * (v - xMin) / (xMax - xMin);
+  const y = v => padding.top + plotH * (1 - (v - yMin) / (yMax - yMin));
+
+  const svg = svgEl('svg', { width, height, viewBox: `0 0 ${width} ${height}` });
+
+  yScale.ticks.forEach(v => {
+    const yy = y(v);
+    svg.appendChild(svgEl('line', { x1: padding.left, x2: width - padding.right, y1: yy, y2: yy, class: 'gridline' }));
+    const label = svgEl('text', { x: padding.left - 8, y: yy + 3, class: 'axis-label', 'text-anchor': 'end' });
+    label.textContent = yFormat(v);
+    svg.appendChild(label);
+  });
+  xScale.ticks.forEach(v => {
+    const xx = x(v);
+    const label = svgEl('text', { x: xx, y: height - padding.bottom + 16, class: 'axis-label', 'text-anchor': 'middle' });
+    label.textContent = xFormat(v);
+    svg.appendChild(label);
+  });
+
+  const y0 = y(0);
+  svg.appendChild(svgEl('line', { x1: padding.left, x2: width - padding.right, y1: y0, y2: y0, class: 'axis-line' }));
+  const zeroLabel = svgEl('text', { x: width - padding.right, y: y0 - 5, class: 'axis-label', 'text-anchor': 'end' });
+  zeroLabel.textContent = 'same arrival time';
+  svg.appendChild(zeroLabel);
+
+  const colorByGroup = Object.fromEntries(groups.map(g => [g.key, resolveColor(g.color)]));
+
+  points.forEach(p => {
+    const hit = svgEl('circle', { cx: x(p.x), cy: y(p.y), r: 12, fill: 'transparent', class: 'mark-hit' });
+    const dot = svgEl('circle', { cx: x(p.x), cy: y(p.y), r: 4, fill: colorByGroup[p.group], stroke: resolveColor('var(--surface-1)'), 'stroke-width': 1.5 });
+    hit.addEventListener('pointerenter', e => showTooltip(e, p.title, [
+      ['Amtrak looked', xFormat(p.x)], ['time saved by MBTA', yFormat(p.y)],
+    ]));
+    hit.addEventListener('pointermove', moveTooltip);
+    hit.addEventListener('pointerleave', hideTooltip);
+    svg.appendChild(dot);
+    svg.appendChild(hit);
+  });
+
+  container.appendChild(svg);
+}
+
+function statTile(container, { label, value, sub }) {
+  const tile = document.createElement('div');
+  tile.className = 'stat-tile';
+  const l = document.createElement('div'); l.className = 'label'; l.textContent = label;
+  const v = document.createElement('div'); v.className = 'value'; v.textContent = value;
+  tile.appendChild(l); tile.appendChild(v);
+  if (sub) {
+    const s = document.createElement('div'); s.className = 'sub'; s.textContent = sub;
+    tile.appendChild(s);
+  }
+  container.appendChild(tile);
+}
+
+function renderTable(container, { columns, rows }) {
+  const table = document.createElement('table');
+  const thead = document.createElement('thead');
+  const headRow = document.createElement('tr');
+  columns.forEach(c => {
+    const th = document.createElement('th');
+    th.textContent = c;
+    headRow.appendChild(th);
+  });
+  thead.appendChild(headRow);
+  table.appendChild(thead);
+  const tbody = document.createElement('tbody');
+  rows.forEach(r => {
+    const tr = document.createElement('tr');
+    r.forEach(cell => {
+      const td = document.createElement('td');
+      td.textContent = cell;
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  container.appendChild(table);
+}
+
+// ============ populate the page ============
+
+function fmtDate(iso) {
+  if (!iso) return '?';
+  const d = new Date(iso);
+  return d.toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+document.getElementById('coverage-line').textContent =
+  `Data: ${fmtDate(DATA.coverage.first_poll)} – ${fmtDate(DATA.coverage.last_poll)} `
+  + `(${DATA.coverage.n_days} days, ${DATA.coverage.n_polls} polls) · generated ${fmtDate(DATA.generated_at)}`;
+
+// --- KPI row ---
+(function renderKpis() {
+  const row = document.getElementById('kpi-row');
+  const south = DATA.delay.by_station['South Station'] || {};
+  DATA.service_order.forEach(svc => {
+    const s = south[svc];
+    statTile(row, {
+      label: DATA.service_labels[svc] + ' · delay at Boston',
+      value: s ? fmtMin(s.median) : 'n/a',
+      sub: s ? `median of ${s.n} trips · p90 ${fmtMin(s.p90)}` : 'no settled trips yet',
+    });
+  });
+})();
+
+// --- corridor line chart ---
+renderLineChart(document.getElementById('chart-corridor'), {
+  categories: DATA.station_order,
+  series: DATA.service_order.map(svc => ({
+    key: svc, label: DATA.service_labels[svc], color: SERVICE_COLOR[svc],
+    values: Object.fromEntries(DATA.station_order.map(st => {
+      const s = (DATA.delay.by_station[st] || {})[svc];
+      return [st, s && s.n >= MIN_N ? s.median : null];
+    })),
+  })),
+  yFormat: fmtMin,
+});
+
+// --- distribution range chart ---
+renderRangeChart(document.getElementById('chart-distribution'), {
+  rows: DATA.service_order.map(svc => {
+    const s = DATA.delay.by_station['South Station'][svc];
+    return s && { label: DATA.service_labels[svc], p10: s.p10, median: s.median, p90: s.p90, n: s.n, color: SERVICE_COLOR[svc] };
+  }).filter(Boolean),
+  xFormat: fmtMin,
+});
+
+// --- time of day / weekday-weekend grouped bars ---
+function seriesFrom(bucketData, categories) {
+  return DATA.service_order.map(svc => ({
+    key: svc, label: DATA.service_labels[svc], color: SERVICE_COLOR[svc],
+    values: Object.fromEntries(categories.map(cat => {
+      const s = (bucketData[cat] || {})[svc];
+      return [cat, s && s.n >= MIN_N ? s.median : null];
+    })),
+  }));
+}
+const TIME_BUCKET_ORDER = ['Early AM (12-6a)', 'AM peak (6-9a)', 'Midday (9a-3p)', 'PM peak (3-7p)', 'Evening (7p-12a)'];
+renderGroupedBar(document.getElementById('chart-timeofday'), {
+  categories: TIME_BUCKET_ORDER.filter(c => c in DATA.delay.by_time_bucket),
+  series: seriesFrom(DATA.delay.by_time_bucket, TIME_BUCKET_ORDER),
+  yFormat: fmtMin,
+});
+renderGroupedBar(document.getElementById('chart-daytype'), {
+  categories: ['Weekday', 'Weekend'],
+  series: seriesFrom(DATA.delay.by_daytype, ['Weekday', 'Weekend']),
+  yFormat: fmtMin,
+});
+
+// --- station breakdown table ---
+renderTable(document.getElementById('table-station'), {
+  columns: ['Station', 'Service', 'n', 'mean', 'median', 'p10', 'p90', 'max'],
+  rows: DATA.station_order.flatMap(st =>
+    DATA.service_order.map(svc => {
+      const s = (DATA.delay.by_station[st] || {})[svc];
+      if (!s) return null;
+      return [st, DATA.service_labels[svc], s.n, fmtMin(s.mean), fmtMin(s.median), fmtMin(s.p10), fmtMin(s.p90), fmtMin(s.max)];
+    }).filter(Boolean)
+  ),
+});
+
+// ============ decision simulation ============
+
+const DELAY_BUCKET_ORDER = DATA.delay_buckets;
+const ROUTE_TYPES = ['Regional', 'Acela'];
+let currentM = String(DATA.decision_points[0]);
+
+function renderDecisionSection() {
+  const d = DATA.decision[currentM];
+
+  const kpiRow = document.getElementById('decision-kpi-row');
+  kpiRow.innerHTML = '';
+  ROUTE_TYPES.forEach(rt => {
+    const o = d.summary.overall[rt];
+    statTile(kpiRow, {
+      label: `Amtrak ${rt} · MBTA wins`,
+      value: o ? `${o.pct_mbta_wins}%` : 'n/a',
+      sub: o ? `of ${o.n} cases · median ${fmtMin(o.median_savings)} saved by switching` : 'not enough data',
+    });
+  });
+
+  const bucketChart = document.getElementById('chart-decision-bucket');
+  bucketChart.innerHTML = '';
+  renderGroupedBar(bucketChart, {
+    categories: DELAY_BUCKET_ORDER,
+    series: ROUTE_TYPES.map(rt => ({
+      key: rt, label: 'Amtrak ' + rt, color: ROUTE_COLOR[rt],
+      values: Object.fromEntries(DELAY_BUCKET_ORDER.map(b => {
+        const s = (d.summary.by_bucket[rt] || {})[b];
+        return [b, s && s.n >= 3 ? s.pct_mbta_wins : null];
+      })),
+    })),
+    yFormat: v => Math.round(v) + '%',
+  });
+
+  const scatterChart = document.getElementById('chart-decision-scatter');
+  scatterChart.innerHTML = '';
+  renderScatter(scatterChart, {
+    points: d.cases.map(c => ({
+      x: c.known_delay, y: c.savings, group: c.route_type,
+      title: `${c.date} · Amtrak ${c.route_type} ${c.train_id}`,
+    })),
+    groups: ROUTE_TYPES.map(rt => ({ key: rt, label: 'Amtrak ' + rt, color: ROUTE_COLOR[rt] })),
+    xFormat: fmtMin, yFormat: fmtMin,
+  });
+
+  const tableEl = document.getElementById('table-decision');
+  tableEl.innerHTML = '';
+  renderTable(tableEl, {
+    columns: ['Route', 'Amtrak looked', 'n', '% MBTA wins', 'median saved', 'median platform wait'],
+    rows: ROUTE_TYPES.flatMap(rt =>
+      DELAY_BUCKET_ORDER.map(b => {
+        const s = (d.summary.by_bucket[rt] || {})[b];
+        if (!s) return null;
+        return [rt, b, s.n, s.pct_mbta_wins + '%', fmtMin(s.median_savings), fmtMin(s.median_wait)];
+      }).filter(Boolean)
+    ),
+  });
+}
+
+(function renderToggle() {
+  const toggle = document.getElementById('decision-toggle');
+  DATA.decision_points.forEach(m => {
+    const btn = document.createElement('button');
+    btn.textContent = `${m} min before departure`;
+    btn.className = String(m) === currentM ? 'active' : '';
+    btn.addEventListener('click', () => {
+      currentM = String(m);
+      [...toggle.children].forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderDecisionSection();
+    });
+    toggle.appendChild(btn);
+  });
+})();
+
+renderDecisionSection();
+</script>
+</body>
+</html>
