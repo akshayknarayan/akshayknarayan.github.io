@@ -12,17 +12,24 @@
       #:location (make-location #:address "532 Broadway Ave East Seattle WA 98102" 
                                 #:latlon "47.6238, -122.3208")
     ]]
-    has a founder who @a[href: "https://en.wikipedia.org/wiki/Espresso_Vivace"]{apparently invented latte art}. This has been my first stop after multiple red eye flights.
+    in Capitol Hill has a founder who @a[href: "https://en.wikipedia.org/wiki/Espresso_Vivace"]{apparently invented latte art}. This has been my first stop after multiple red eye flights.
   }
 
   @text{
-    @link-cafe[@make-cafe[
-      #:name "Floret"
-      #:url "http://floretseattle.com/"
-      #:location (make-location #:address "Gate A1, SeaTac Airport, SeaTac, WA" 
-                                #:latlon "47.4427, -122.3022")
-    ]],
-    in SeaTac Airport near the A gates, which has Stumptown beans and surprisingly good coffee for an airport. It's also a great option for vegetarian food at the airport.
+  @link-cafe[@make-cafe[
+    #:name "Santo"
+    #:url "https://www.santocoffee.co/"
+    #:location (make-location #:address "1325 Northeast 65th Street Seattle, WA, 98115" 
+                              #:latlon "47.6757, -122.3135")
+  ]]
+  is a great option near Green Lake, a bit north of UW.
+  Closer to UW, 
+  @link-cafe[@make-cafe[
+    #:name "Seafab"
+    #:url "https://www.seafabcafe.com/"
+    #:location (make-location #:address "1001 NE Boat St, Seattle, WA 98105"
+                              #:latlon "47.6531, -122.3175")
+  ]] is good.
   }
 
   @text{
@@ -63,27 +70,22 @@
         (make-location #:address "312 Central Way Kirkland, WA 98033" 
                        #:latlon "47.6777, -122.2029"))
     ]]
-    in Redmond will make you a @a[href: "https://en.wikipedia.org/wiki/Cappuccino#Capuccino_Freddo"]{cappuccino freddo}, which is not something you usually see.
+    in Redmond and Kirkland will make you a @a[href: "https://en.wikipedia.org/wiki/Cappuccino#Capuccino_Freddo"]{cappuccino freddo}, which is not something you usually see.
+  }
+  
+  @text{
+    @link-cafe[@make-cafe[
+      #:name "Floret"
+      #:url "http://floretseattle.com/"
+      #:location (make-location #:address "Gate A1, SeaTac Airport, SeaTac, WA" 
+                                #:latlon "47.4427, -122.3022")
+    ]],
+    in SeaTac Airport near the A gates, which has Stumptown beans and surprisingly good coffee for an airport. It's also a great option for vegetarian food at the airport.
   }
 
   @text{
-    @scouting-report-label Panda reports that
-    @link-cafe[@make-cafe[
-      #:name "Ada's Technical Books & Cafe"
-      #:url "https://adasbooks.com/adas-cafe-menu"
-      #:location (make-location #:address "425 15th Ave E Seattle, WA 98112" 
-                                #:latlon "47.6227, -122.3128")
-      #:scouting #t
-    ]]
-    (also in Capitol Hill) and 
-    @link-cafe[@make-cafe[
-      #:name "Santo"
-      #:url "https://www.santocoffee.co/"
-      #:location (make-location #:address "1325 Northeast 65th Street Seattle, WA, 98115" 
-                                #:latlon "47.6757, -122.3135")
-      #:scouting #t
-    ]]
-    (a bit north of the U-District) are good. Rachee recommends 
+    @scouting-report-label
+    Rachee recommends 
     @link-cafe[@make-cafe[
       #:name "Victrola"
       #:url "https://www.victrolacoffee.com/pages/locations"
