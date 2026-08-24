@@ -72,19 +72,20 @@
     ]] 
     are good options in Cambridge. 
     @link-cafe[@make-cafe[
-      #:name "Curio"
-      #:url "https://noobiwankenoobi.github.io/"
+      #:name "Honey's"
+      #:url "https://www.instagram.com/honeyscambridge/"
       #:location (make-location #:address "441 Cambridge St.  Cambridge, MA 02141" 
                                 #:latlon "42.3716, -71.0835")
     ]]
-    in East Cambridge has not just good coffee, but also excellent liege-style waffles. 
+    (formerly Curio, now apparently run by a former Curio employee)
+    in East Cambridge has not just good coffee, but also liege-style waffles. 
     @link-cafe[@make-cafe[
       #:name "Elmendorf"
       #:url "http://www.elmendorfbaking.com/"
       #:location (make-location #:address "594 Cambridge St, Cambridge, MA 02141" 
                                 #:latlon "42.3718, -71.0864")
     ]]
-    nearby is a good bakery and baking materials supply shop (but Curio's coffee is better).
+    nearby is a good bakery and baking materials supply shop.
   }
 
   @text{
