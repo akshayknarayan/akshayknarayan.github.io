@@ -163,4 +163,18 @@
     #:venue "SIGCOMM"
     #:year 2021
     #:type "Artifact Evaluation Committee"]
+  
+  @make-service[
+    #:venue "CISE"
+    #:year 2026
+    #:type "NSF Panelist"
+    #:url "https://www.nsf.gov/funding/merit-review/volunteer"
+  ]
+
+  @make-service[
+    #:venue "CISE"
+    #:year 2025
+    #:type "NSF Panelist"
+    #:url "https://www.nsf.gov/funding/merit-review/volunteer"
+  ]
 ))
