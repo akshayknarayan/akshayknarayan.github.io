@@ -48,6 +48,17 @@
 @(define (publications)
    (list
     @make-publication[
+      #:title "We Need to Talk About the Actual Guarantees of Rust-based Systems"
+      #:authors (list "Corinn Tiffany" "Artem Agvanian" "Ziyun Song" "Isabella Szabo" "Kinan Dak Albab" "Will Crichton" "Philip Levis" 'me "Deepti Raghavan" "Malte Schwarzkopf")
+      #:venue "PLOS"
+      #:year 2026
+      #:doi "10.1145/3831586.3838150"
+      #:key "sniffer"
+      #:links (list (cons "./res/plos26-final-we-need-to-talk.pdf" "Paper")
+                    (cons "https://plos-workshop.org/2026/program.php" "Program"))
+    ]
+
+    @make-publication[
       #:title "Kernel Extension DSLs Should Be Verifier-Safe!"
       #:authors (list "Franco Solleza" "Justus Adam" 'me "Malte Schwarzkopf" "Andrew Crotty" "Nesime Tatbul")
       #:venue "eBPF"
