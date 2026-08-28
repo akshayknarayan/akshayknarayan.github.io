@@ -46,19 +46,26 @@
 
 @(define (students) (list
   @make-student[
-    #:name "Franco Solleza"
+    #:name "Zixuan Peng"
     #:type @phd
-    #:start-time "May 2025"
+    #:start-time "September 2026"
     #:advising-affiliation @brown
-    #:note "Co-Advised with Malte Schwarzkopf"
   ]
-  
+
   @make-student[
     #:name "Oğuzhan Çölkesen"
     #:type @phd
     #:start-time "September 2025"
     #:advising-affiliation @brown
     #:note "Co-Advised with Nikos Vasilakis"
+  ]
+  
+  @make-student[
+    #:name "Franco Solleza"
+    #:type @phd
+    #:start-time "May 2025"
+    #:advising-affiliation @brown
+    #:note "Co-Advised with Malte Schwarzkopf"
   ]
 
   @make-student[
@@ -72,6 +79,13 @@
     #:name "Bhavani Venkatesan"
     #:type @ugrad
     #:start-time "May 2025"
+    #:advising-affiliation @brown
+  ]
+  
+  @make-student[
+    #:name "Alexander Khosrowshahi"
+    #:type @ugrad
+    #:start-time "October 2025"
     #:advising-affiliation @brown
   ]
   

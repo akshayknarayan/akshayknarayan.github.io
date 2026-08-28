@@ -76,6 +76,15 @@ By convention, author order lists students and post-docs first (ordered by contr
   @(exact "\\end{itemize}")))
 
 @(exact "\\noindent\\hspace{1cm}")
+@bf{Ph.D. research advisor}, Brown University:
+@(define brown-phd 
+  (filter (lambda (s) (and 
+    (equal? (student-advising-affiliation s) "Brown University")
+    (equal? (student-type s) "Ph.D.")))
+  (students)))
+@(list-students brown-phd)
+
+@(exact "\\noindent\\hspace{1cm}")
 @bf{M.Sc. research advisor}, Brown University:
 @(define brown-msc 
   (filter (lambda (s) (and 
