@@ -59,21 +59,21 @@ By convention, author order lists students and post-docs first (ordered by contr
 @(exact "\\section{Advising}")
 
 @(define (list-students ss) (list
-  @(exact "\\begin{itemize}[leftmargin=1.5cm]\\setlength{\\itemsep}{0pt}")
+  (exact "\\begin{tabular*}{\\dimexpr \\textwidth -1.5cm}[t]{@{}p{4in}r c l@{}}")
   @(for/list ([s ss]) (list
-    (exact "\\item")
-    (exact "\\begin{tabular*}{\\dimexpr \\textwidth -1.5cm}[t]{@{}l@{\\extracolsep{\\fill}}r@{}}")
     (student-name s)
     (if (empty? (student-postgrad-affiliation s)) '() (exact (format " $\\rightarrow$ ~a" (student-postgrad-affiliation s))))
     (exact "& ")
-    (emph (student-start-time s)) @(exact " --- ") (if (empty? (student-end-time s)) "" (emph (student-end-time s)))
+    (emph (student-start-time s))
+    (exact "& --- & ")
+    (if (empty? (student-end-time s)) " " (emph (student-end-time s)))
     (exact "\\\\")
     (if (empty? (student-note s)) '() 
         (exact (format "~a & \\\\" (student-note s))))
     (if (empty? (student-thesis s)) '() 
         (exact (format "Thesis: \\href{~a}{~a} & \\\\" (car (student-thesis s)) (cdr (student-thesis s)))))
-    (exact "\\end{tabular*}")))
-  @(exact "\\end{itemize}")))
+    ))
+  @(exact "\\end{tabular*}")))
 
 @(exact "\\noindent\\hspace{1cm}")
 @bf{Ph.D. research advisor}, Brown University:

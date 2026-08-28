@@ -57,7 +57,31 @@
     #:type @phd
     #:start-time "September 2025"
     #:advising-affiliation @brown
-    #:note "Co-Advised with Nikos Vasilakis"
+    #:note "Co-Advised with Nikos Vasilakis."
+  ]
+  
+  @make-student[
+    #:name "Yuchen Lu"
+    #:type @phd
+    #:start-time "May 2025"
+    #:advising-affiliation @brown
+    #:note "Comprehensive Exam Committee Member. Co-Advised with Deepti Raghavan and Nikos Vasilakis."
+  ]
+  
+  @make-student[
+    #:name "Justus Adam"
+    #:type @phd
+    #:start-time "May 2026"
+    #:advising-affiliation @brown
+    #:note "Thesis Committee Member."
+  ]
+  
+  @make-student[
+    #:name "Morgan Borjigin-Wang"
+    #:type @phd
+    #:start-time "September 2025"
+    #:advising-affiliation @brown
+    #:note "Comprehensive Exam Committee Member. Co-Advised with Deepti Raghavan and Malte Schwarzkopf."
   ]
   
   @make-student[
@@ -65,7 +89,7 @@
     #:type @phd
     #:start-time "May 2025"
     #:advising-affiliation @brown
-    #:note "Co-Advised with Malte Schwarzkopf"
+    #:note "Thesis Committee Member. Co-Advised with Malte Schwarzkopf"
   ]
 
   @make-student[
@@ -119,6 +143,15 @@
     #:end-time "May 2026"
     #:advising-affiliation @brown
     #:postgrad-affiliation "Google"
+  ]
+  
+  @make-student[
+    #:name "Katie Li"
+    #:type @ugrad
+    #:start-time "April 2026"
+    #:end-time "May 2026"
+    #:advising-affiliation @brown
+    #:note "Senior Honor's Thesis Reader."
   ]
   
   @make-student[
