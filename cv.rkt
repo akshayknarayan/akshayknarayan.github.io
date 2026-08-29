@@ -58,9 +58,9 @@ By convention, author order lists students and post-docs first (ordered by contr
 
 @(exact "\\section{Advising}")
 
-@(define (list-students ss) (list
-  (exact "\\begin{tabular*}{\\dimexpr \\textwidth -1.5cm}[t]{@{}p{4in}r c l@{}}")
-  @(for/list ([s ss]) (list
+@(define (student-rows ss) (list
+  (for/list ([s ss]) (list
+    (exact "\\raggedright ")
     (student-name s)
     (if (empty? (student-postgrad-affiliation s)) '() (exact (format " $\\rightarrow$ ~a" (student-postgrad-affiliation s))))
     (exact "& ")
@@ -68,48 +68,50 @@ By convention, author order lists students and post-docs first (ordered by contr
     (exact "& --- & ")
     (if (empty? (student-end-time s)) " " (emph (student-end-time s)))
     (exact "\\\\")
-    (if (empty? (student-note s)) '() 
-        (exact (format "~a & \\\\" (student-note s))))
-    (if (empty? (student-thesis s)) '() 
-        (exact (format "Thesis: \\href{~a}{~a} & \\\\" (car (student-thesis s)) (cdr (student-thesis s)))))
-    ))
-  @(exact "\\end{tabular*}")))
+    (if (empty? (student-note s)) '()
+        (exact (format "\\hspace{1em} ~a & \\\\" (student-note s))))
+    (if (empty? (student-thesis s)) '()
+        (exact (format "\\hspace{1em} Thesis: \\href{~a}{~a} & \\\\" (car (student-thesis s)) (cdr (student-thesis s)))))
+    ))))
 
-@(exact "\\noindent\\hspace{1cm}")
-@bf{Ph.D. research advisor}, Brown University:
-@(define brown-phd 
-  (filter (lambda (s) (and 
+@(define (section-header label) (list
+  (exact (format "\\textbf{~a} &&& \\\\[4pt]" label))))
+
+@(exact "\\begin{pltstabular*}{\\dimexpr \\textwidth -1.5cm}[t]{@{\\hspace{1cm}}p{4in}r c l@{}}")
+
+@(section-header "Ph.D. research advisor, Brown University:")
+@(define brown-phd
+  (filter (lambda (s) (and
     (equal? (student-advising-affiliation s) "Brown University")
     (equal? (student-type s) "Ph.D.")))
   (students)))
-@(list-students brown-phd)
+@(student-rows brown-phd)
 
-@(exact "\\noindent\\hspace{1cm}")
-@bf{M.Sc. research advisor}, Brown University:
-@(define brown-msc 
-  (filter (lambda (s) (and 
+@(section-header "M.Sc. research advisor, Brown University:")
+@(define brown-msc
+  (filter (lambda (s) (and
     (equal? (student-advising-affiliation s) "Brown University")
     (equal? (student-type s) "M.Sc.")))
   (students)))
-@(list-students brown-msc)
+@(student-rows brown-msc)
 
-@(exact "\\noindent\\hspace{1cm}")
-@bf{Undergraduate research advisor}, Brown University:
-@(define brown-ugrad 
-  (filter (lambda (s) (and 
+@(section-header "Undergraduate research advisor, Brown University:")
+@(define brown-ugrad
+  (filter (lambda (s) (and
     (equal? (student-advising-affiliation s) "Brown University")
     (equal? (student-type s) "Undergraduate")))
   (students)))
-@(list-students brown-ugrad)
+@(student-rows brown-ugrad)
 
-@(exact "\\noindent\\hspace{1cm}")
-@bf{Research advisor}, Massachusetts Institute of Technology:
-@(define mit-research 
-  (filter (lambda (s) (and 
+@(section-header "Research advisor, Massachusetts Institute of Technology:")
+@(define mit-research
+  (filter (lambda (s) (and
     (equal? (student-advising-affiliation s) "Massachusetts Institute of Technology")
     (equal? (student-type s) "Research advisor")))
   (students)))
-@(list-students mit-research)
+@(student-rows mit-research)
+
+@(exact "\\end{pltstabular*}")
 
 @(exact "\\section{Professional Service}")
 

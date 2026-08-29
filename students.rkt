@@ -87,18 +87,12 @@
   @make-student[
     #:name "Franco Solleza"
     #:type @phd
-    #:start-time "May 2025"
+    #:start-time "February 2025"
+    #:end-time "August 2026"
     #:advising-affiliation @brown
-    #:note "Thesis Committee Member. Co-Advised with Malte Schwarzkopf"
+    #:note "Thesis Committee Member. Co-Advised with Malte Schwarzkopf."
   ]
 
-  @make-student[
-    #:name "Hailey Hsiung"
-    #:type @ugrad
-    #:start-time "September 2025"
-    #:advising-affiliation @brown
-  ]
-  
   @make-student[
     #:name "Bhavani Venkatesan"
     #:type @ugrad
@@ -143,6 +137,7 @@
     #:end-time "May 2026"
     #:advising-affiliation @brown
     #:postgrad-affiliation "Google"
+    #:note "Honor's Thesis Advisor."
   ]
   
   @make-student[
@@ -151,7 +146,7 @@
     #:start-time "April 2026"
     #:end-time "May 2026"
     #:advising-affiliation @brown
-    #:note "Senior Honor's Thesis Reader."
+    #:note "Honor's Thesis Reader."
   ]
   
   @make-student[
@@ -161,6 +156,7 @@
     #:end-time "May 2026"
     #:advising-affiliation @brown
     #:postgrad-affiliation "Adobe"
+    #:note "Honor's Thesis Advisor."
   ]
   
   @make-student[
