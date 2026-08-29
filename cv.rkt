@@ -60,7 +60,6 @@ By convention, author order lists students and post-docs first (ordered by contr
 
 @(define (student-rows ss) (list
   (for/list ([s ss]) (list
-    (exact "\\raggedright ")
     (student-name s)
     (if (empty? (student-postgrad-affiliation s)) '() (exact (format " $\\rightarrow$ ~a" (student-postgrad-affiliation s))))
     (exact "& ")
@@ -69,9 +68,9 @@ By convention, author order lists students and post-docs first (ordered by contr
     (if (empty? (student-end-time s)) " " (emph (student-end-time s)))
     (exact "\\\\")
     (if (empty? (student-note s)) '()
-        (exact (format "\\hspace{1em} ~a & \\\\" (student-note s))))
+        (exact (format "\\hangindent=1em\\hangafter=1 \\hspace{1em} ~a & \\\\" (student-note s))))
     (if (empty? (student-thesis s)) '()
-        (exact (format "\\hspace{1em} Thesis: \\href{~a}{~a} & \\\\" (car (student-thesis s)) (cdr (student-thesis s)))))
+        (exact (format "\\hangindent=1em\\hangafter=1 \\hspace{1em} Thesis: \\href{~a}{~a} & \\\\" (car (student-thesis s)) (cdr (student-thesis s)))))
     ))))
 
 @(define (section-header label) (list
