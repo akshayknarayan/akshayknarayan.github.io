@@ -38,7 +38,7 @@
 @(define (pixel-size min-tile max-tile) (inexact->exact (* 256 (+ 1 (- max-tile min-tile)))))
 
 @(define (maptile-url x y zoom)
-  (format "https://a.basemaps.cartocdn.com/rastertiles/voyager/~a/~a/~a.png" zoom x y))
+  (format "https://tile.openstreetmap.org/~a/~a/~a.png" zoom x y))
 
 @(define (annotation cafe zoom base_tile_x base_tile_y)
   (define xy (latlon_to_pixel_offset (location-lat (cafe-location cafe)) (location-lon (cafe-location cafe)) zoom base_tile_x base_tile_y))
@@ -71,8 +71,8 @@
 
 @(define (map-cafes #:cafes cafes #:zoom zoom)
   (define all-cafes (filter (compose1 location-show cafe-location) (flatten (for/list ([c cafes]) (expand-cafe c)))))
-  (define xtiles (for/list ([c all-cafes]) (floor (lon_to_xtile (location-lon (cafe-location c)) zoom))))
-  (define ytiles (for/list ([c all-cafes]) (floor (lat_to_ytile (location-lat (cafe-location c)) zoom))))
+  (define xtiles (for/list ([c all-cafes]) (exact-floor (lon_to_xtile (location-lon (cafe-location c)) zoom))))
+  (define ytiles (for/list ([c all-cafes]) (exact-floor (lat_to_ytile (location-lat (cafe-location c)) zoom))))
   (define min-xtile (apply min xtiles))
   (define max-xtile (apply max xtiles))
   (define min-ytile (apply min ytiles))
