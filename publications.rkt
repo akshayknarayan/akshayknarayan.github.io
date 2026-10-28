@@ -55,6 +55,7 @@
       #:doi "10.1145/3831586.3838150"
       #:key "sniffer"
       #:links (list (cons "./res/plos26-final-we-need-to-talk.pdf" "Paper")
+                    (cons "./res/PLOS26_We_Need_to_Talk_presentation.pdf" "Slides PDF")
                     (cons "https://plos-workshop.org/2026/program.php" "Program"))
     ]
 
